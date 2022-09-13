@@ -1,7 +1,14 @@
 package Product;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,14 +32,13 @@ public class Gui extends JFrame implements ActionListener{
         text1 = new JTextField();
         JLabel num2 = new JLabel("Num 2: ");
         text2 = new JTextField();
-        result = new JLabel("0");
+        result = new JLabel("");
         result.setFont(new Font("Arial", Font.PLAIN,50));
         result.setSize(400,50);
         button = new JButton("Calculate!");
         button.addActionListener(this);
 
         top_panel.setPreferredSize(new Dimension(400,50));
-
         bot_panel.setPreferredSize(new Dimension(400,75));
         bot_panel.setBackground(Color.DARK_GRAY);
 
@@ -41,7 +47,6 @@ public class Gui extends JFrame implements ActionListener{
         num2.setPreferredSize(new Dimension(50,25));
         text2.setPreferredSize(new Dimension(50,25));
         button.setPreferredSize(new Dimension(100,25));
-
         result.setForeground(Color.WHITE);
 
         this.add(top_panel);
