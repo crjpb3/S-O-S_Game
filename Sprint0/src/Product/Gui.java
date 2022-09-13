@@ -19,7 +19,7 @@ public class Gui extends JFrame implements ActionListener{
     JButton button;
     JTextField text1;
     JTextField text2;
-    Gui() {
+    public Gui() {
         this.setTitle("Addition Calc");
         this.setSize(400,170);
         this.setLayout(new FlowLayout());
@@ -60,7 +60,7 @@ public class Gui extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    private int add(int num1, int num2){
+    public int add(int num1, int num2){
         return num1 + num2;
     }
 
