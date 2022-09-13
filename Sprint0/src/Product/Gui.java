@@ -56,6 +56,7 @@ public class Gui extends JFrame implements ActionListener{
         top_panel.add(num2);
         top_panel.add(text2);
         top_panel.add(button);
+
         this.setVisible(true);
     }
 
