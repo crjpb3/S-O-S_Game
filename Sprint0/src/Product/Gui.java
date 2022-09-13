@@ -35,7 +35,7 @@ public class Gui extends JFrame implements ActionListener{
         result = new JLabel("");
         result.setFont(new Font("Arial", Font.PLAIN,50));
         result.setSize(400,50);
-        button = new JButton("Calculate!");
+        button = new JButton("Add!");
         button.addActionListener(this);
 
         top_panel.setPreferredSize(new Dimension(400,50));
@@ -46,7 +46,7 @@ public class Gui extends JFrame implements ActionListener{
         text1.setPreferredSize(new Dimension(50,25));
         num2.setPreferredSize(new Dimension(50,25));
         text2.setPreferredSize(new Dimension(50,25));
-        button.setPreferredSize(new Dimension(100,25));
+        button.setPreferredSize(new Dimension(60,25));
         result.setForeground(Color.WHITE);
 
         this.add(top_panel);
@@ -60,10 +60,14 @@ public class Gui extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
+    private int add(int num1, int num2){
+        return num1 + num2;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button){
-            int sum = Integer.parseInt(text1.getText()) + Integer.parseInt(text2.getText());
+            int sum = add(Integer.parseInt(text1.getText()), Integer.parseInt(text2.getText()));
             result.setText(String.valueOf(sum));
             bot_panel.add(result);
             bot_panel.revalidate();
