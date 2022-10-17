@@ -1,5 +1,7 @@
 package Product;
 
-public class SOSGui {
+import javax.swing.JFrame;
+
+public class SOSGui extends JFrame {
 
 }
