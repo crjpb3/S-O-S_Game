@@ -2,9 +2,11 @@ package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SOSBoardTest {
+import org.junit.jupiter.api.BeforeEach;
 
-  @org.junit.jupiter.api.BeforeEach
+class SOSGameTest {
+
+  @BeforeEach
   void setUp() {
   }
 }
