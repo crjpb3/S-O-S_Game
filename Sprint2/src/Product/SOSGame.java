@@ -3,10 +3,11 @@ package Product;
 import java.util.ArrayList;
 import Product.SOSCell;
 
-enum GameStatus {PLAYING,OVER}
+enum Status {PLAYING,OVER}
 
 public class SOSGame{
   private ArrayList<SOSCell> gameBoard = new ArrayList<SOSCell>();
+  Status gameStatus;
   public SOSGame(){
 
   }
@@ -27,7 +28,13 @@ public class SOSGame{
 
   }
 
-  public void setGameStatus(){
+  public void setGameStatus(int statusCode){
+    if(statusCode == 1){
+      gameStatus = Status.PLAYING;
+    }
+    else{
+      gameStatus = Status.OVER;
+    }
 
   }
 
