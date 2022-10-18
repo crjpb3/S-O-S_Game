@@ -1,15 +1,17 @@
 package Product;
 
-import javax.swing.JPanel;
+import java.util.ArrayList;
+import Product.SOSCell;
 
 enum GameStatus {PLAYING,OVER}
 
-public class SOSGame extends JPanel {
-  public <T> SOSGame(int mode, T size){
+public class SOSGame{
+  private ArrayList<SOSCell> gameBoard = new ArrayList<SOSCell>();
+  public SOSGame(){
 
   }
 
-  private void setBoardSize(int size){
+  public <T> void setBoardSize(T size){
 
   }
 
@@ -17,11 +19,31 @@ public class SOSGame extends JPanel {
 
   }
 
-  private void setGameMode(int mode){
+  public void setGameMode(int mode){
 
   }
 
-  public GameStatus getGameMode(){
+  public String getGameMode(){
+
+  }
+
+  public void setGameStatus(){
+
+  }
+
+  public String getGameStatus(){
+
+  }
+
+  public boolean isCellOccupied(int row, int col){
+
+  }
+
+  public int makeMove(int row, int col){
+
+  }
+
+  public String getPlayerTurn(){
 
   }
 

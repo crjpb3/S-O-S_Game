@@ -1,8 +1,6 @@
 package Product;
 
-import javax.swing.JLabel;
-
-public class SOSCell extends JLabel {
+public class SOSCell{
   public SOSCell(){
 
   }
