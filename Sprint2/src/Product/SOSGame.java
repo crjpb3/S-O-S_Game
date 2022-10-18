@@ -8,11 +8,11 @@ enum Status {PLAYING,OVER}
 public class SOSGame{
   private ArrayList<SOSCell> gameBoard = new ArrayList<SOSCell>();
   Status gameStatus;
-  public SOSGame(){
+  public <T> SOSGame(T size, int mode){
 
   }
 
-  public <T> void setBoardSize(T size){
+  private <T> void setBoardSize(T size){
 
   }
 
@@ -20,7 +20,7 @@ public class SOSGame{
 
   }
 
-  public void setGameMode(int mode){
+  private void setGameMode(int mode){
 
   }
 
@@ -28,7 +28,7 @@ public class SOSGame{
 
   }
 
-  public void setGameStatus(int statusCode){
+  private void setGameStatus(int statusCode){
     if(statusCode == 1){
       gameStatus = Status.PLAYING;
     }
@@ -48,6 +48,10 @@ public class SOSGame{
 
   public int makeMove(int row, int col){
 
+  }
+
+  private void setPlayerTurn(){
+    
   }
 
   public String getPlayerTurn(){

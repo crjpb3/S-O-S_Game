@@ -6,49 +6,44 @@ import org.junit.jupiter.api.Test;
 class SOSGameTest {
   @Test
   void testBoardSize(){
-    Product.SOSGame Game = new Product.SOSGame();
 
     //AC 1.1.1
-    Game.setBoardSize(5);
-    assertEquals(5, Game.getBoardSize());
+    Product.SOSGame Game1 = new Product.SOSGame(5,0);
+    assertEquals(5, Game1.getBoardSize());
 
     //AC 1.1.2
-    Game.setBoardSize(-5);
-    assertEquals(3, Game.getBoardSize());
+    Product.SOSGame Game2 = new Product.SOSGame(-5,0);
+    assertEquals(3, Game2.getBoardSize());
 
     //AC 1.1.3
-    Game.setBoardSize(5.5);
-    assertEquals(5, Game.getBoardSize());
+    Product.SOSGame Game3 = new Product.SOSGame(5.5,0);
+    assertEquals(5, Game3.getBoardSize());
 
     //AC 1.1.4
-    Game.setBoardSize(50);
-    assertEquals(10, Game.getBoardSize());
+    Product.SOSGame Game4 = new Product.SOSGame(50,0);
+    assertEquals(10, Game4.getBoardSize());
 
     //AC 1.1.5
-    Game.setBoardSize('z');
-    assertEquals(3, Game.getBoardSize());
+    Product.SOSGame Game5 = new Product.SOSGame('z',0);
+    assertEquals(3, Game5.getBoardSize());
   }
 
   @Test
   void testGameModeSelection(){
-    Product.SOSGame Game = new Product.SOSGame();
-
     //AC 2.1.1
-    Game.setGameMode(0);
-    assertEquals("Simple", Game.getGameMode());
+    Product.SOSGame Game1 = new Product.SOSGame(3,0);
+    assertEquals("Simple", Game1.getGameMode());
 
     //AC 2.1.2
-    Game.setGameMode(1);
-    assertEquals("General", Game.getGameMode());
+    Product.SOSGame Game2 = new Product.SOSGame(3,1);
+    assertEquals("General", Game2.getGameMode());
   }
 
   @Test
   void testGameStart(){
-    Product.SOSGame Game = new Product.SOSGame();
+    Product.SOSGame Game = new Product.SOSGame(3,0);
 
     //AC 3.1.0
-    Game.setBoardSize(3);
-    Game.setGameMode(0);
     assertEquals(3, Game.getBoardSize());
     assertEquals("Simple", Game.getGameMode());
     assertEquals("PLAYING", Game.getGameStatus());
@@ -62,32 +57,30 @@ class SOSGameTest {
 
   @Test
   void testPlayerMove(){
-    Product.SOSGame Game = new Product.SOSGame();
+    Product.SOSGame Game = new Product.SOSGame(0,3);
 
     //AC 4 & 6 Incomplete implementation testing
-    Game.setBoardSize(3);
-
     //AC 4.1.1 & 6.1.1
     assertFalse(Game.isCellOccupied(0,0));
     Game.makeMove(0,0);
     assertTrue(Game.isCellOccupied(0,0));
-    assertTrue("Player 2", Game.getPlayerTurn());
+    assertEquals("Player 2", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,0));
-    assertTrue("Player 2", Game.getPlayerTurn());
+    assertEquals("Player 2", Game.getPlayerTurn());
 
     //AC 4.1.2 & 6.1.2
     Game.makeMove(0,1);
     assertTrue(Game.isCellOccupied(0,1));
-    assertTrue("Player 1", Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,1));
-    assertTrue("Player 1", Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
 
     //AC 4.1.4 & 6.1.6
     assertEquals(-1, Game.makeMove(-5,0));
     assertEquals(-1, Game.makeMove(0,5));
     assertEquals(-1, Game.makeMove(5,0));
-    assertTrue("Player 1", Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
   }
 }
