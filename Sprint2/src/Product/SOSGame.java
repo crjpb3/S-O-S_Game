@@ -1,33 +1,66 @@
 package Product;
 
+import static java.lang.Math.ceil;
+
 import java.util.ArrayList;
 
-enum Status {PLAYING,OVER}
-
 public class SOSGame{
-  private ArrayList<SOSCell> gameBoard = new ArrayList<SOSCell>();
+  public enum Status {PLAYING,OVER}
+  public enum Mode {SIMPLE, GENERAL}
+  public ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
   Status gameStatus;
+  Mode gameMode;
+  int boardSize;
   public <T> SOSGame(T size, int mode){
+    setBoardSize(size);
+    setGameMode(mode);
 
+    for(int i = 0; i < getBoardSize(); i++){
+      for(int j = 0; j < getBoardSize(); j++){
+        gameBoard.get(i).add(new SOSCell());
+        gameBoard.get(i).get(j).setContent("");
+      }
+    }
   }
 
-  private <T> void setBoardSize(T size){
-
+  public <T> void setBoardSize(T size){
+    switch(size.getClass().getSimpleName()){
+      case "Integer":
+        if((int)size < 0){
+          boardSize = 3;
+        }
+        else if((int)size > 10){
+          boardSize = 10;
+        }
+        break;
+      case "Double":
+      case "Float":
+        if((int)size >= 3 && (int)size <= 11){
+          boardSize = (int)ceil((double)size);
+        }
+        else{
+          boardSize = 3;
+        }
+        break;
+      default:
+        boardSize = 3;
+        break;
+    }
   }
 
   public int getBoardSize(){
-    return 0;
+    return boardSize;
   }
 
-  private void setGameMode(int mode){
+  public void setGameMode(int mode){
 
   }
 
-  public String getGameMode(){
-    return "";
+  public Mode getGameMode(){
+    return gameMode;
   }
 
-  private void setGameStatus(int statusCode){
+  public void setGameStatus(int statusCode){
     if(statusCode == 1){
       gameStatus = Status.PLAYING;
     }
@@ -37,8 +70,8 @@ public class SOSGame{
 
   }
 
-  public String getGameStatus(){
-    return "";
+  public Status getGameStatus(){
+    return gameStatus;
   }
 
   public boolean isCellOccupied(int row, int col){
@@ -49,7 +82,7 @@ public class SOSGame{
     return 0;
   }
 
-  private void setPlayerTurn(){
+  public void setPlayerTurn(){
 
   }
 

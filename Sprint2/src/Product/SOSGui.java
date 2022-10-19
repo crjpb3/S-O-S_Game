@@ -8,12 +8,10 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService;
 
 public class SOSGui extends JFrame implements ActionListener {
   JPanel Board = new JPanel();
@@ -26,6 +24,7 @@ public class SOSGui extends JFrame implements ActionListener {
     this.setTitle("SOS Game");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(800,800);
+    this.setResizable(false);
     this.setLayout(new BorderLayout(10,10));
 
     Board.setLayout(new GridLayout(3,3));
@@ -61,7 +60,8 @@ public class SOSGui extends JFrame implements ActionListener {
   public void paint(Graphics g){
     Graphics2D g2D = (Graphics2D) g;
     paintComponents(this.getGraphics());
-    g2D.drawLine(50,0,50,150);
+    g2D.drawLine(190,215,190,250);
+    //g2D.drawString("S",200,200);
   }
 
   @Override
@@ -72,7 +72,7 @@ public class SOSGui extends JFrame implements ActionListener {
 
 class SOSPanel extends JPanel implements ActionListener{
   public SOSPanel(){
-    
+
   }
   @Override
   public void actionPerformed(ActionEvent e) {
