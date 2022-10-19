@@ -1,7 +1,6 @@
 package Product;
 
 import java.util.ArrayList;
-import Product.SOSCell;
 
 enum Status {PLAYING,OVER}
 
@@ -17,7 +16,7 @@ public class SOSGame{
   }
 
   public int getBoardSize(){
-
+    return 0;
   }
 
   private void setGameMode(int mode){
@@ -25,7 +24,7 @@ public class SOSGame{
   }
 
   public String getGameMode(){
-
+    return "";
   }
 
   private void setGameStatus(int statusCode){
@@ -39,23 +38,23 @@ public class SOSGame{
   }
 
   public String getGameStatus(){
-
+    return "";
   }
 
   public boolean isCellOccupied(int row, int col){
-
+    return false;
   }
 
   public int makeMove(int row, int col){
-
+    return 0;
   }
 
   private void setPlayerTurn(){
-    
+
   }
 
   public String getPlayerTurn(){
-
+    return "";
   }
 
 }
