@@ -1,7 +1,6 @@
 package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import Product.SOSGame;
 import org.junit.jupiter.api.Test;
 
@@ -60,23 +59,23 @@ class SOSGameTest {
     assertFalse(Game.isCellEmpty(0,0));
     Game.makeMove(0,0);
     assertTrue(Game.isCellEmpty(0,0));
-    assertEquals("Player 2", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,0));
-    assertEquals("Player 2", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
 
     //AC 4.1.2 & 6.1.2
     Game.makeMove(0,1);
     assertTrue(Game.isCellEmpty(0,1));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,1));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
 
     //AC 4.1.4 & 6.1.6
     assertEquals(-1, Game.makeMove(-5,0));
     assertEquals(-1, Game.makeMove(0,5));
     assertEquals(-1, Game.makeMove(5,0));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
   }
 }
