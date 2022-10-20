@@ -47,7 +47,7 @@ class SOSGameTest {
     //AC 3.1.0
     assertEquals(3, Game.getBoardSize());
     assertEquals(SOSGame.Mode.SIMPLE, Game.getGameMode());
-    assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
+    //assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
   }
 
   @Test
