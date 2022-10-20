@@ -29,12 +29,16 @@ public class SOSGui extends JFrame implements ActionListener {
 
     Board.setLayout(new GridLayout(3,3));
     Board.setPreferredSize(new Dimension(100,100));
+
     Left.setPreferredSize(new Dimension(100,700));
     Left.setBackground(Color.RED);
+
     Right.setPreferredSize(new Dimension(100,700));
     Right.setBackground(Color.BLUE);
+
     Top.setPreferredSize(new Dimension(800,100));
     Top.setBackground(Color.black);
+
     Bottom.setPreferredSize(new Dimension(800,100));
     Bottom.setBackground(Color.YELLOW);
 
@@ -64,16 +68,6 @@ public class SOSGui extends JFrame implements ActionListener {
     //g2D.drawString("S",200,200);
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-
-  }
-}
-
-class SOSPanel extends JPanel implements ActionListener{
-  public SOSPanel(){
-
-  }
   @Override
   public void actionPerformed(ActionEvent e) {
 

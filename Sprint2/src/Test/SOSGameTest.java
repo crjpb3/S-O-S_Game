@@ -49,12 +49,6 @@ class SOSGameTest {
     assertEquals(3, Game.getBoardSize());
     assertEquals(SOSGame.Mode.SIMPLE, Game.getGameMode());
     assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
-
-    for(int i = 0; i < Game.getBoardSize(); i++){
-      for(int j = 0; j < Game.getBoardSize(); j++){
-        assertFalse(Game.isCellOccupied(i,j));
-      }
-    }
   }
 
   @Test

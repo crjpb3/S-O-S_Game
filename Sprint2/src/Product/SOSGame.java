@@ -1,6 +1,6 @@
 package Product;
 
-import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 
 import java.util.ArrayList;
 
@@ -14,11 +14,12 @@ public class SOSGame{
   public <T> SOSGame(T size, int mode){
     setBoardSize(size);
     setGameMode(mode);
+    setGameStatus(1);
 
     for(int i = 0; i < getBoardSize(); i++){
+      gameBoard.add(new ArrayList<SOSCell>());
       for(int j = 0; j < getBoardSize(); j++){
         gameBoard.get(i).add(new SOSCell());
-        gameBoard.get(i).get(j).setContent("");
       }
     }
   }
@@ -26,17 +27,22 @@ public class SOSGame{
   public <T> void setBoardSize(T size){
     switch(size.getClass().getSimpleName()){
       case "Integer":
-        if((int)size < 0){
+        int intSize = (int)size;
+        if(intSize < 3){
           boardSize = 3;
         }
-        else if((int)size > 10){
+        else if(intSize > 10){
           boardSize = 10;
+        }
+        else{
+          boardSize = (int)size;
         }
         break;
       case "Double":
       case "Float":
-        if((int)size >= 3 && (int)size <= 11){
-          boardSize = (int)ceil((double)size);
+        double dblSize = (double)size;
+        if(dblSize >= 3 && dblSize <= 11){
+          boardSize = (int)floor((double)size);
         }
         else{
           boardSize = 3;
@@ -53,7 +59,12 @@ public class SOSGame{
   }
 
   public void setGameMode(int mode){
-
+    if(mode == 1){
+      gameMode = Mode.GENERAL;
+    }
+    else{
+      gameMode = Mode.SIMPLE;
+    }
   }
 
   public Mode getGameMode(){
