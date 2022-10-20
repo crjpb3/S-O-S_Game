@@ -5,26 +5,24 @@ import static java.lang.Math.floor;
 import java.util.ArrayList;
 
 public class SOSGame{
-  public enum Status {PLAYING,OVER}
+  //public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
   public enum Mode {SIMPLE, GENERAL}
   public enum Turn{PL1, PL2}
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
-  Status gameStatus;
+  //Status gameStatus;
   Mode gameMode;
 
   Turn currentTurn;
   private int boardSize;
   public <T> SOSGame(T size, int mode){
+    resetGame(size, mode);
+  }
+
+  public <T> void resetGame(T size, int mode){
     setBoardSize(size);
     setGameMode(mode);
-    setGameStatus(1);
-
-    for(int i = 0; i < getBoardSize(); i++){
-      gameBoard.add(new ArrayList<SOSCell>());
-      for(int j = 0; j < getBoardSize(); j++){
-        gameBoard.get(i).add(new SOSCell());
-      }
-    }
+    initBoard();
+    //setGameStatus(Status.PLAYING);
   }
 
   private <T> void setBoardSize(T size){
@@ -61,6 +59,15 @@ public class SOSGame{
     return boardSize;
   }
 
+  private void initBoard(){
+    for(int i = 0; i < getBoardSize(); i++){
+      gameBoard.add(new ArrayList<SOSCell>());
+      for(int j = 0; j < getBoardSize(); j++){
+        gameBoard.get(i).add(new SOSCell());
+      }
+    }
+  }
+
   private void setGameMode(int mode){
     if(mode == 1){
       gameMode = Mode.GENERAL;
@@ -74,19 +81,16 @@ public class SOSGame{
     return gameMode;
   }
 
-  private void setGameStatus(int statusCode){
-    if(statusCode == 1){
-      gameStatus = Status.PLAYING;
-    }
-    else{
-      gameStatus = Status.OVER;
-    }
-
+/*
+  private void setGameStatus(Status status){
+    gameStatus = status;
   }
+
 
   public Status getGameStatus(){
     return gameStatus;
   }
+*/
 
   public boolean isCellEmpty(int row, int col){
     return true;
@@ -97,7 +101,12 @@ public class SOSGame{
   }
 
   private void setPlayerTurn(){
-
+    if(currentTurn == Turn.PL1){
+      currentTurn = Turn.PL2;
+    }
+    else{
+      currentTurn = Turn.PL1;
+    }
   }
 
   public Turn getPlayerTurn(){
