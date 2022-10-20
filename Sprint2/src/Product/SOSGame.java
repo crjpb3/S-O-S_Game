@@ -7,9 +7,12 @@ import java.util.ArrayList;
 public class SOSGame{
   public enum Status {PLAYING,OVER}
   public enum Mode {SIMPLE, GENERAL}
+  public enum Turn{PL1, PL2}
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
   Status gameStatus;
   Mode gameMode;
+
+  Turn currentTurn;
   private int boardSize;
   public <T> SOSGame(T size, int mode){
     setBoardSize(size);
@@ -97,8 +100,8 @@ public class SOSGame{
 
   }
 
-  public String getPlayerTurn(){
-    return "";
+  public Turn getPlayerTurn(){
+    return currentTurn;
   }
 
 }
