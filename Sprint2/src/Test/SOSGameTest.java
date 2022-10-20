@@ -57,9 +57,9 @@ class SOSGameTest {
 
     //AC 4 & 6 Incomplete implementation testing
     //AC 4.1.1 & 6.1.1
-    assertFalse(Game.isCellOccupied(0,0));
+    assertFalse(Game.isCellEmpty(0,0));
     Game.makeMove(0,0);
-    assertTrue(Game.isCellOccupied(0,0));
+    assertTrue(Game.isCellEmpty(0,0));
     assertEquals("Player 2", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,0));
@@ -67,7 +67,7 @@ class SOSGameTest {
 
     //AC 4.1.2 & 6.1.2
     Game.makeMove(0,1);
-    assertTrue(Game.isCellOccupied(0,1));
+    assertTrue(Game.isCellEmpty(0,1));
     assertEquals("Player 1", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,1));

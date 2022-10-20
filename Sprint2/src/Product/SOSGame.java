@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class SOSGame{
   public enum Status {PLAYING,OVER}
   public enum Mode {SIMPLE, GENERAL}
-  public ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
+  private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
   Status gameStatus;
   Mode gameMode;
-  int boardSize;
+  private int boardSize;
   public <T> SOSGame(T size, int mode){
     setBoardSize(size);
     setGameMode(mode);
@@ -24,7 +24,7 @@ public class SOSGame{
     }
   }
 
-  public <T> void setBoardSize(T size){
+  private <T> void setBoardSize(T size){
     switch(size.getClass().getSimpleName()){
       case "Integer":
         int intSize = (int)size;
@@ -58,7 +58,7 @@ public class SOSGame{
     return boardSize;
   }
 
-  public void setGameMode(int mode){
+  private void setGameMode(int mode){
     if(mode == 1){
       gameMode = Mode.GENERAL;
     }
@@ -71,7 +71,7 @@ public class SOSGame{
     return gameMode;
   }
 
-  public void setGameStatus(int statusCode){
+  private void setGameStatus(int statusCode){
     if(statusCode == 1){
       gameStatus = Status.PLAYING;
     }
@@ -85,15 +85,15 @@ public class SOSGame{
     return gameStatus;
   }
 
-  public boolean isCellOccupied(int row, int col){
-    return false;
+  public boolean isCellEmpty(int row, int col){
+    return true;
   }
 
   public int makeMove(int row, int col){
     return 0;
   }
 
-  public void setPlayerTurn(){
+  private void setPlayerTurn(){
 
   }
 

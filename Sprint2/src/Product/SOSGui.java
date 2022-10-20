@@ -24,7 +24,7 @@ public class SOSGui extends JFrame implements ActionListener {
     this.setTitle("SOS Game");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(800,800);
-    this.setResizable(false);
+    //this.setResizable(false);
     this.setLayout(new BorderLayout(10,10));
 
     Board.setLayout(new GridLayout(3,3));
