@@ -1,21 +1,21 @@
 package Product;
 
 public class SOSCell{
-  public enum CellContent {NULL, S_CHAR, O_CHAR}
-  CellContent currentContent;
+  //public enum CellContent {NULL, S_CHAR, O_CHAR}
+  String currentContent;
   public SOSCell(){
-    this.setContent(CellContent.NULL);
+    this.setContent("");
   }
 
   public boolean isEmpty(){
-    return currentContent == CellContent.NULL;
+    return currentContent == "";
   }
 
-  public void setContent(CellContent content){
+  public void setContent(String content){
     currentContent = content;
   }
   
-  public CellContent getContent(){
+  public String getContent(){
     return currentContent;
   }
 }
