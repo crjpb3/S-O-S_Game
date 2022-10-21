@@ -2,7 +2,6 @@ package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import Product.SOSCell.CellContent;
 import org.junit.jupiter.api.Test;
 import Product.SOSCell;
 
@@ -12,10 +11,10 @@ class SOSCellTest {
     SOSCell Cell1 = new SOSCell();
     assertTrue(Cell1.isEmpty());
 
-    Cell1.setContent(SOSCell.CellContent.S_CHAR);
+    Cell1.setContent("S");
     assertFalse(Cell1.isEmpty());
 
-    Cell1.setContent(SOSCell.CellContent.O_CHAR);
+    Cell1.setContent("O");
     assertFalse(Cell1.isEmpty());
   }
 
@@ -23,10 +22,10 @@ class SOSCellTest {
   void testGetContent(){
     SOSCell Cell1 = new SOSCell();
     
-    Cell1.setContent(CellContent.S_CHAR);
-    assertEquals(CellContent.S_CHAR, Cell1.getContent());
+    Cell1.setContent("S");
+    assertEquals("S", Cell1.getContent());
 
-    Cell1.setContent(SOSCell.CellContent.O_CHAR);
-    assertEquals(SOSCell.CellContent.O_CHAR, Cell1.getContent());
+    Cell1.setContent("O");
+    assertEquals("O", Cell1.getContent());
   }
 }
