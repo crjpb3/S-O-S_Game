@@ -99,8 +99,20 @@ public class SOSGame{
     return gameBoard.get(row).get(col).isEmpty();
   }
 
-  public int makeMove(int row, int col){
-    return 0;
+  public int makeMove(int row, int col, String moveContent){
+    if(isMoveValid(row, col)){
+      gameBoard.get(row).get(col).setContent(moveContent);
+      changePlayerTurn();
+      return 0;
+    }
+    return -1;
+  }
+
+  private boolean isMoveValid(int row, int col){
+    if((row >= 0 && col >= 0) && (row < getBoardSize() && col < getBoardSize())){
+      return isCellEmpty(row, col);
+    }
+    return false;
   }
 
   private void changePlayerTurn(){
@@ -116,7 +128,7 @@ public class SOSGame{
     if(currentTurn == Turn.PL1){
       return "Player 1";
     }
-    return "PLayer 2";
+    return "Player 2";
   }
 
 }
