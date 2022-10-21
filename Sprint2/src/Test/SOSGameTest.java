@@ -33,11 +33,11 @@ class SOSGameTest {
   void testGameModeSelection(){
     //AC 2.1.1
     Product.SOSGame Game1 = new Product.SOSGame(3,0);
-    assertEquals(SOSGame.Mode.SIMPLE, Game1.getGameMode());
+    assertEquals("Simple", Game1.getGameMode());
 
     //AC 2.1.2
     Product.SOSGame Game2 = new Product.SOSGame(3,1);
-    assertEquals(SOSGame.Mode.GENERAL, Game2.getGameMode());
+    assertEquals("General", Game2.getGameMode());
   }
 
   @Test
@@ -46,7 +46,7 @@ class SOSGameTest {
 
     //AC 3.1.0
     assertEquals(3, Game.getBoardSize());
-    assertEquals(SOSGame.Mode.SIMPLE, Game.getGameMode());
+    assertEquals("Simple", Game.getGameMode());
     //assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
   }
 
@@ -59,23 +59,23 @@ class SOSGameTest {
     assertFalse(Game.isCellEmpty(0,0));
     Game.makeMove(0,0);
     assertTrue(Game.isCellEmpty(0,0));
-    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
+    assertEquals("Player 2", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,0));
-    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
+    assertEquals("Player 2", Game.getPlayerTurn());
 
     //AC 4.1.2 & 6.1.2
     Game.makeMove(0,1);
     assertTrue(Game.isCellEmpty(0,1));
-    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
     //AC 4.1.3 & 6.1.5
     assertEquals(-1, Game.makeMove(0,1));
-    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
 
     //AC 4.1.4 & 6.1.6
     assertEquals(-1, Game.makeMove(-5,0));
     assertEquals(-1, Game.makeMove(0,5));
     assertEquals(-1, Game.makeMove(5,0));
-    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
+    assertEquals("Player 1", Game.getPlayerTurn());
   }
 }

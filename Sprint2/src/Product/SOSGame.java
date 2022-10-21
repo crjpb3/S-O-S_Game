@@ -7,12 +7,12 @@ import java.util.ArrayList;
 public class SOSGame{
   //public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
   public enum Mode {SIMPLE, GENERAL}
-  public enum Turn{PL1, PL2}
+  public enum Turn {PL1, PL2}
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
   //Status gameStatus;
   Mode gameMode;
 
-  Turn currentTurn;
+  Turn currentTurn = Turn.PL1;
   private int boardSize;
   public <T> SOSGame(T size, int mode){
     resetGame(size, mode);
@@ -77,8 +77,11 @@ public class SOSGame{
     }
   }
 
-  public Mode getGameMode(){
-    return gameMode;
+  public String getGameMode(){
+    if(gameMode == Mode.SIMPLE){
+      return "Simple";
+    }
+    return "General";
   }
 
 /*
@@ -93,14 +96,14 @@ public class SOSGame{
 */
 
   public boolean isCellEmpty(int row, int col){
-    return true;
+    return gameBoard.get(row).get(col).isEmpty();
   }
 
   public int makeMove(int row, int col){
     return 0;
   }
 
-  private void setPlayerTurn(){
+  private void changePlayerTurn(){
     if(currentTurn == Turn.PL1){
       currentTurn = Turn.PL2;
     }
@@ -109,8 +112,11 @@ public class SOSGame{
     }
   }
 
-  public Turn getPlayerTurn(){
-    return currentTurn;
+  public String getPlayerTurn(){
+    if(currentTurn == Turn.PL1){
+      return "Player 1";
+    }
+    return "PLayer 2";
   }
 
 }
