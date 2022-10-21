@@ -61,7 +61,7 @@ public class SOSGame{
 
   private void initBoard(){
     for(int i = 0; i < getBoardSize(); i++){
-      gameBoard.add(new ArrayList<SOSCell>());
+      gameBoard.add(new ArrayList<>());
       for(int j = 0; j < getBoardSize(); j++){
         gameBoard.get(i).add(new SOSCell());
       }
