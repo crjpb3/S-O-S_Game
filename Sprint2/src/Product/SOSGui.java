@@ -48,7 +48,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private JLabel currentTurnLabel;
 
   public SOSGui(){
-    boardCellsList = new ArrayList<ArrayList<JLabel>>();
+    boardCellsList = new ArrayList<>();
 
     this.setTitle("SOS Game");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -80,7 +80,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Bottom.setBackground(Color.YELLOW);
     Bottom.add(startButton);
 
-    createBoardGUI(3);
+    //createBoardGUI(3);
 
     this.add(Board, BorderLayout.CENTER);
     this.add(Left, BorderLayout.WEST);
@@ -90,7 +90,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     this.setVisible(true);
 
-    //createPreviewBoard(); //One time function to display board/game representation
+    createPreviewBoard(); //One time function to display board/game representation
   }
 
   @Override
@@ -99,14 +99,14 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     if(e.getSource() == startButton) {
       //Board.setLayout(new GridLayout(boardCellsList.size(), boardCellsList.size()));
       startButton.setVisible(false);
-      createBoardGUI(6);
+      resetBoard(4);
     }
   }
   @Override
   public void mouseClicked(MouseEvent e) {
     //Move event
     for(int i = 0; i < boardCellsList.size(); i++){
-      for(int j = 0; j < boardCellsList.size(); j++){
+      for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
           boardCellsList.get(i).get(j).setText(String.valueOf(i) + ',' + j);
         }
@@ -114,13 +114,28 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     }
   }
 
-  private void createBoardGUI(int boardSize){
+  private void destroyBoard(int boardSize){
+    for(int i = 0; i < boardCellsList.size(); i++){
+      for(int j = 0; j < boardCellsList.get(i).size(); j++){
+        Board.remove(boardCellsList.get(i).get(j));
+      }
+    }
+
+    for(int i = 0; i < boardCellsList.size(); i++){
+      for(int j = 0; j < boardCellsList.get(i).size(); j++){
+        boardCellsList.get(i).clear();
+      }
+      boardCellsList.clear();
+    }
+  }
+
+  private void resetBoard(int boardSize){
     //Initialize cell list
-    boardCellsList = new ArrayList<ArrayList<JLabel>>();
+    destroyBoard(boardSize);
     Board.setLayout(new GridLayout(boardSize,boardSize, 0,0));
 
     for(int i = 0; i < boardSize; i++){
-      boardCellsList.add(new ArrayList<JLabel>());
+      boardCellsList.add(new ArrayList<>());
       for(int j = 0; j < boardSize; j++){
         boardCellsList.get(i).add(new JLabel("", SwingConstants.CENTER));
         boardCellsList.get(i).get(j).setOpaque(true);
