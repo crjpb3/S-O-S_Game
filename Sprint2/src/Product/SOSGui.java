@@ -147,6 +147,14 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Board = new JPanel();
     Board.setPreferredSize(new Dimension(100,100));
 
+    Top = new JPanel(new FlowLayout());
+    Top.setPreferredSize(new Dimension(800,100));
+    Top.add(gameModeLabel);
+    Top.add(simpleGameModeOption);
+    Top.add(generalGameModeOption);
+    Top.add(boardSizeLabel);
+    Top.add(boardSizeInput);
+
     Left = new JPanel(new GridLayout(3,1));
     Left.setPreferredSize(new Dimension(100,700));
     Left.add(player1SectionLabel);
@@ -158,14 +166,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Right.add(player2SectionLabel);
     Right.add(player2MoveS);
     Right.add(player2MoveO);
-
-    Top = new JPanel(new FlowLayout());
-    Top.setPreferredSize(new Dimension(800,100));
-    Top.add(gameModeLabel);
-    Top.add(simpleGameModeOption);
-    Top.add(generalGameModeOption);
-    Top.add(boardSizeLabel);
-    Top.add(boardSizeInput);
 
     Bottom = new JPanel();
     Bottom.setPreferredSize(new Dimension(800,100));
