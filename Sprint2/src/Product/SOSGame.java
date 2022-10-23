@@ -8,7 +8,7 @@ public class SOSGame{
   //public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
   public enum Mode {SIMPLE, GENERAL}
   public enum Turn {PL1, PL2}
-  private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<ArrayList<SOSCell>>();
+  private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   //Status gameStatus;
   Mode gameMode;
 
@@ -21,6 +21,14 @@ public class SOSGame{
   public <T> void resetGame(T size, int mode){
     setBoardSize(size);
     setGameMode(mode);
+    /*
+    for(int i = 0; i < getBoardSize(); i++){
+      for(int j = 0; j < getBoardSize(); j++){
+        gameBoard.get(i).clear();
+      }
+      gameBoard.clear();
+    }
+*/
     initBoard();
     //setGameStatus(Status.PLAYING);
   }
