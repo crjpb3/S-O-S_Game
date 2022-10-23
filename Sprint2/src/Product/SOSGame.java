@@ -21,16 +21,7 @@ public class SOSGame{
   public <T> void resetGame(T size, int mode){
     setBoardSize(size);
     setGameMode(mode);
-    /*
-    for(int i = 0; i < getBoardSize(); i++){
-      for(int j = 0; j < getBoardSize(); j++){
-        gameBoard.get(i).clear();
-      }
-      gameBoard.clear();
-    }
-*/
     initBoard();
-    //setGameStatus(Status.PLAYING);
   }
 
   private <T> void setBoardSize(T size){
@@ -91,17 +82,6 @@ public class SOSGame{
     }
     return "General";
   }
-
-/*
-  private void setGameStatus(Status status){
-    gameStatus = status;
-  }
-
-
-  public Status getGameStatus(){
-    return gameStatus;
-  }
-*/
 
   public boolean isCellEmpty(int row, int col){
     return gameBoard.get(row).get(col).isEmpty();

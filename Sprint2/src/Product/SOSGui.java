@@ -1,7 +1,6 @@
 package Product;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -69,7 +67,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    //Start button clicked
     if(e.getSource() == startButton) {
       //Pass gameModeSelection, boardSize for start game; set playerTurn to "Player 1"
       startGame();
@@ -92,7 +89,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   }
   @Override
   public void mouseClicked(MouseEvent e) {
-    //Move event
+    //Making a move event
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){

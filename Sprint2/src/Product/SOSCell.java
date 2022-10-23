@@ -1,7 +1,6 @@
 package Product;
 
 public class SOSCell{
-  //public enum CellContent {NULL, S_CHAR, O_CHAR}
   String currentContent;
   public SOSCell(){
     this.setContent("");
