@@ -9,6 +9,8 @@ public class SOSGame{
   Status gameStatus;
   public enum Mode {SIMPLE, GENERAL}
   Mode gameMode;
+  private int p1GeneralGameScore = 0;
+  private int p2GeneralGameScore = 0;
   public enum Turn {PL1, PL2}
   Turn currentTurn = Turn.PL1;
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
@@ -18,9 +20,12 @@ public class SOSGame{
   }
 
   public <T> void resetGame(T size, int mode){
+    p1GeneralGameScore = 0;
+    p2GeneralGameScore = 0;
     setBoardSize(size);
     setGameMode(mode);
     initBoard();
+    setGameStatus(Status.PLAYING);
   }
 
   private <T> void setBoardSize(T size){
@@ -64,6 +69,15 @@ public class SOSGame{
         gameBoard.get(i).add(new SOSCell());
       }
     }
+  }
+
+  private void setGameStatus(Status newStatus){
+   //To Do
+  }
+
+  public Status getGameStatus(){
+    //To Do
+    return Status.PLAYING;//temporary placeholder return
   }
 
   private void setGameMode(int mode){
@@ -118,4 +132,17 @@ public class SOSGame{
     return "Player 2";
   }
 
+  private void updateGeneralGameScore(Turn playerTurn){
+    //To Do
+  }
+
+  public int getGeneralGameScore(Turn playerTurn){
+    //To Do
+    //Using Turn playerTurn as a parameter to choose which player score we will return
+    return p1GeneralGameScore;//temporary placeholder return
+  }
+
+  private void checkWinConditions(){
+
+  }
 }
