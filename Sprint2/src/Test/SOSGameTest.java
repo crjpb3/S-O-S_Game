@@ -96,12 +96,22 @@ class SOSGameTest {
   }
 
   @Test
+  void testSimpleDraw(){
+
+  }
+
+  @Test
   void testPlayer1GeneralWin(){
 
   }
 
   @Test
   void testPlayer2GeneralWin(){
+
+  }
+
+  @Test
+  void testGeneralDraw(){
 
   }
 }
