@@ -119,10 +119,9 @@ public class SOSGame{
   private void changePlayerTurn(){
     if(currentTurn == Turn.PL1){
       currentTurn = Turn.PL2;
+      return;
     }
-    else{
-      currentTurn = Turn.PL1;
-    }
+    currentTurn = Turn.PL1;
   }
 
   public String getPlayerTurn(){
@@ -142,7 +141,7 @@ public class SOSGame{
     return p1GeneralGameScore;//temporary placeholder return
   }
 
-  private void checkWinConditions(){
+  private void checkGameOver(){
 
   }
 }
