@@ -1,6 +1,8 @@
 package Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import Product.SOSGame;
 import org.junit.jupiter.api.Test;
 
 class SOSGameTest {
@@ -46,7 +48,7 @@ class SOSGameTest {
     //AC 3.1.0
     assertEquals(3, Game.getBoardSize());
     assertEquals("Simple", Game.getGameMode());
-    //assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
+    assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
   }
 
   @Test
@@ -76,5 +78,30 @@ class SOSGameTest {
     assertEquals(-1, Game.makeMove(0,5, "S"));
     assertEquals(-1, Game.makeMove(5,0, "S"));
     assertEquals("Player 1", Game.getPlayerTurn());
+  }
+
+  @Test
+  void testGetGeneralGameScore(){
+
+  }
+
+  @Test
+  void testPlayer1SimpleWin(){
+
+  }
+
+  @Test
+  void testPlayer2SimpleWin(){
+
+  }
+
+  @Test
+  void testPlayer1GeneralWin(){
+
+  }
+
+  @Test
+  void testPlayer2GeneralWin(){
+
   }
 }
