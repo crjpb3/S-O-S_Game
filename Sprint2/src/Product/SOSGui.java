@@ -25,7 +25,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   SOSGame currentGame;
   private ArrayList<ArrayList<JLabel>> boardCellsList;
   private String playerTurn;
-  private String playerMoveChar;
+  private String p1MoveChar = "S";
+  private String p2MoveChar = "S";
   private int gameModeSelection;
 
   //Panels declarations
@@ -36,6 +37,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private JPanel Top;
   private JPanel Bottom;
   private JButton startButton;
+  private JButton resetButton;
 
   //Options items declarations
   private JLabel gameModeLabel;
@@ -61,8 +63,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   public SOSGui(){
     boardCellsList = new ArrayList<>();
-    initGUI(3);
-    createPreviewBoard(); //One time function to display board/game representation
+    initGUI();
+    resetBoard(3);
+    createPreviewBoard(); //One time function to display board/game representation; "main screen"
   }
 
   @Override
@@ -70,7 +73,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     if(e.getSource() == startButton) {
       //Pass gameModeSelection, boardSize for start game; set playerTurn to "Player 1"
       startGame();
-      startButton.setVisible(false);
+      Bottom.remove(startButton);
+      Bottom.add(resetButton);
       Bottom.add(currentTurnLabel);
       resetBoard(currentGame.getBoardSize());
     }
@@ -80,11 +84,21 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     else if (e.getSource() == generalGameModeOption){
       gameModeSelection = 1;
     }
-    else if(e.getSource() == player1MoveS || e.getSource() == player2MoveS){
-      playerMoveChar = "S";
+    else if(e.getSource() == player1MoveS){
+      p1MoveChar = "S";
     }
-    else if(e.getSource() == player1MoveO || e.getSource() == player2MoveO){
-      playerMoveChar = "O";
+    else if(e.getSource() == p2MoveChar){
+      p2MoveChar = "S";
+    }
+    else if(e.getSource() == player1MoveO){
+      p1MoveChar = "O";
+    }
+    else if(e.getSource() == player2MoveO){
+      p2MoveChar = "O";
+    }
+    else if(e.getSource() == resetButton){
+      startGame();
+      resetBoard(currentGame.getBoardSize());
     }
   }
   @Override
@@ -93,10 +107,16 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
-          currentGame.makeMove(i,j,playerMoveChar);
+          if(playerTurn == "Player 1") {
+            currentGame.makeMove(i, j, p1MoveChar);
+            boardCellsList.get(i).get(j).setText(p1MoveChar);
+          }
+          else{
+            currentGame.makeMove(i, j, p2MoveChar);
+            boardCellsList.get(i).get(j).setText(p2MoveChar);
+          }
           playerTurn = currentGame.getPlayerTurn();
           currentTurnLabel.setText("Turn: " + playerTurn);
-          boardCellsList.get(i).get(j).setText(playerMoveChar);
         }
       }
     }
@@ -118,7 +138,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     
     //Left panel Components
     player1SectionLabel = new JLabel("Player 1");
-    player1MoveS = new JRadioButton("S", false);
+    player1MoveS = new JRadioButton("S", true);
     player1MoveS.addActionListener(this);
     player1MoveO = new JRadioButton("O", false);
     player1MoveO.addActionListener(this);
@@ -128,7 +148,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     
     //Right panel components
     player2SectionLabel = new JLabel("Player 2");
-    player2MoveS = new JRadioButton("S", false);
+    player2MoveS = new JRadioButton("S", true);
     player2MoveS.addActionListener(this);
     player2MoveO = new JRadioButton("O", false);
     player2MoveO.addActionListener(this);
@@ -139,6 +159,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     //Bottom panel components
     startButton = new JButton("Start");
     startButton.addActionListener(this);
+    resetButton = new JButton("New Game");
+    resetButton.addActionListener(this);
 
     currentTurnLabel = new JLabel();
   }
@@ -169,7 +191,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     Bottom = new JPanel();
     Bottom.setPreferredSize(new Dimension(800,100));
-    Bottom.setBackground(Color.YELLOW);
     Bottom.add(startButton);
   }
 
@@ -187,11 +208,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     this.add(Bottom, BorderLayout.SOUTH);
   }
 
-  private void initGUI(int boardSize){
+  private void initGUI(){
     panelsComponentsSetup();
     panelsSetup();
     frameSetup();
-    resetBoard(boardSize);
+    //resetBoard(boardSize);
   }
 
   private void destroyBoard(int boardSize){
@@ -232,24 +253,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
         Board.add(boardCellsList.get(i).get(j), SwingConstants.CENTER);
       }
     }
+    Board.updateUI();
   }
 
   private void startGame(){
     currentGame = new SOSGame(Integer.parseInt(boardSizeInput.getText()), gameModeSelection);
     playerTurn = currentGame.getPlayerTurn();
     currentTurnLabel.setText("Turn: " + playerTurn);
-
-    Top.remove(simpleGameModeOption);
-    Top.remove(generalGameModeOption);
-    Top.remove(boardSizeInput);
-    boardSizeLabel.setText("Board Size: " + String.valueOf(currentGame.getBoardSize()));
-
-    if(gameModeSelection == 0){
-      gameModeLabel.setText("Simple Game                    ");
-    }
-    else{
-      gameModeLabel.setText("General Game                    ");
-    }
   }
 
   private void createPreviewBoard(){
