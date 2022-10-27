@@ -257,9 +257,25 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   }
 
   private void startGame(){
-    currentGame = new SOSGame(Integer.parseInt(boardSizeInput.getText()), gameModeSelection);
+    try {
+      currentGame = new SOSGame(Integer.parseInt(boardSizeInput.getText()), gameModeSelection);
+    }
+    catch(NumberFormatException e1){
+      try{
+        currentGame = new SOSGame(Double.parseDouble(boardSizeInput.getText()), gameModeSelection);
+      }
+      catch(NumberFormatException e2){
+       try{
+         currentGame = new SOSGame(Float.parseFloat(boardSizeInput.getText()), gameModeSelection);
+       }
+       catch(NumberFormatException e3){
+         currentGame = new SOSGame(boardSizeInput.getText(), gameModeSelection);
+       }
+      }
+    }
     playerTurn = currentGame.getPlayerTurn();
     currentTurnLabel.setText("Turn: " + playerTurn);
+    boardSizeInput.setText(Integer.toString(currentGame.getBoardSize()));
   }
 
   private void createPreviewBoard(){
