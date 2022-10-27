@@ -5,14 +5,13 @@ import static java.lang.Math.floor;
 import java.util.ArrayList;
 
 public class SOSGame{
-  //public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
+  public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
+  Status gameStatus;
   public enum Mode {SIMPLE, GENERAL}
-  public enum Turn {PL1, PL2}
-  private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
-  //Status gameStatus;
   Mode gameMode;
-
+  public enum Turn {PL1, PL2}
   Turn currentTurn = Turn.PL1;
+  private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   private int boardSize;
   public <T> SOSGame(T size, int mode){
     resetGame(size, mode);
