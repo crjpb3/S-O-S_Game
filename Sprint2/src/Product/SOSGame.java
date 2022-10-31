@@ -103,6 +103,8 @@ public class SOSGame{
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
+      //Check for SOS formation
+      //Check for game over based on game mode
       changePlayerTurn();
       return 0;
     }
@@ -141,7 +143,14 @@ public class SOSGame{
     return p1GeneralGameScore;//temporary placeholder return
   }
 
-  private void checkGameOver(){
+  private boolean isSOSFormed(){
+    //To Do
+    //Check if an SOS was formed
+  }
 
+  private boolean isGameOver(){
+    //To Do
+    //Check if the game is over
+    //This function may change or be removed entirely
   }
 }
