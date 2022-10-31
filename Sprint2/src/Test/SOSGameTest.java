@@ -183,7 +183,7 @@ class SOSGameTest {
 
   @Test
   void testPlayer2GeneralWin(){
-    //AC 7.1
+    //AC 7.2
     SOSGame Game = new SOSGame(3,1);
     assertEquals(SOSGame.Status.PLAYING,Game.getGameStatus());//Show game has not ended
     assertEquals(0, Game.getGeneralGameScore(SOSGame.Turn.PL1));//Show player 1 score at 0
@@ -206,7 +206,7 @@ class SOSGameTest {
 
   @Test
   void testGeneralDraw(){
-    //AC 7.2
+    //AC 7.3
     SOSGame Game = new SOSGame(3,1);
     assertEquals(SOSGame.Status.PLAYING, Game.getGameStatus());
     //Fill all cells without creating an SOS
