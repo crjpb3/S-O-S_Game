@@ -149,9 +149,13 @@ public class SOSGame{
   }
 
   public int getGeneralGameScore(Turn playerTurn){
-    //To Do
-    //Using Turn playerTurn as a parameter to choose which player score we will return
-    return p1GeneralGameScore;//temporary placeholder return
+    switch(playerTurn){
+      case PL1:
+        return p1GeneralGameScore;
+      case PL2:
+        return p2GeneralGameScore;
+    }
+    return -1;
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
