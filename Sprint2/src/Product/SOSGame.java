@@ -104,9 +104,11 @@ public class SOSGame{
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
+      /*
       if(isSOSFormed(row,col,moveContent) && (Objects.equals(getGameMode(), "Simple"))){
         System.out.println("SOS Made in Simple Game");
       }
+      */
       //Check for SOS formation
       //Check for game over based on game mode
       changePlayerTurn();
@@ -156,9 +158,9 @@ public class SOSGame{
     int maxColIndex = getBoardSize() - 1;
 
     switch(moveContent){
-      case "S"://Check row-2 cells subarray on all sides of the cell
+      case "S"://Check row+/-2 cells subarray on all sides of the cell
         break;
-      case "O"://Check row-1 cells subarray around the cell
+      case "O"://Check row+/-1 cells subarray around the cell
         //If an "O" is placed in a corner, it is impossible to have formed an SOS
         if(((row == 0)&&(col == 0))||(row == 0)&&(col == getBoardSize() - 1)||((row == getBoardSize() - 1)&&(col == 0))||((row == getBoardSize() - 1)&&(col == getBoardSize() - 1))){
           return false;
@@ -184,18 +186,18 @@ public class SOSGame{
           for(int j = minColIndex; j <= maxColIndex; j++){
             if(Objects.equals(gameBoard.get(i).get(j).getContent(), "S")){
               System.out.println("Checking cell: (" + i + "," + j + ")");
-              int symCellRow = 0;
-              int symCellCol = 0;
+              int oppCellRow = 0;
+              int oppCellCol = 0;
 
               switch(row - i){
                 case -1:
-                  symCellRow = row - 1;
+                  oppCellRow = row - 1;
                   break;
                 case 0:
-                  symCellRow = row;
+                  oppCellRow = row;
                   break;
                 case 1:
-                  symCellRow = row + 1;
+                  oppCellRow = row + 1;
                   break;
                 default:
                   break;
@@ -203,22 +205,22 @@ public class SOSGame{
 
               switch(col - i){
                 case -1:
-                  symCellCol = col - 1;
+                  oppCellCol = col - 1;
                   break;
                 case 0:
-                  symCellCol = col;
+                  oppCellCol = col;
                   break;
                 case 1:
-                  symCellCol = col + 1;
+                  oppCellCol = col + 1;
                   break;
                 default:
                   break;
               }
 
-              System.out.println("SymCellRow: " + symCellRow);
-              System.out.println("SymCellCol: " + symCellCol);
+              System.out.println("oppCellRow: " + oppCellRow);
+              System.out.println("oppCellCol: " + oppCellCol);
 
-              if(Objects.equals(gameBoard.get(symCellRow).get(symCellCol).getContent(), "S")){
+              if(Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")){
                 return true;
               }
             }
