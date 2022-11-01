@@ -303,4 +303,24 @@ public class SOSGame{
 
     }
   }
+
+  public int getCellOwnerID(int row, int col){
+    return gameBoard.get(row).get(col).getCellOwner();
+  }
+
+  public int getBeginRowIndex(int row, int col){
+    return gameBoard.get(row).get(col).getBeginRowIndex();
+  }
+
+  public int getEndRowIndex(int row, int col){
+    return gameBoard.get(row).get(col).getEndRowIndex();
+  }
+
+  public int getBeginColIndex(int row, int col){
+    return gameBoard.get(row).get(col).getBeginColIndex();
+  }
+
+  public int getEndColIndex(int row, int col){
+    return gameBoard.get(row).get(col).getEndColIndex();
+  }
 }
