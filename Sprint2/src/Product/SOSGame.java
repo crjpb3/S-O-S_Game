@@ -3,6 +3,7 @@ package Product;
 import static java.lang.Math.floor;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SOSGame{
   public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
@@ -103,6 +104,9 @@ public class SOSGame{
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
+      if(isSOSFormed(row,col,moveContent) && (Objects.equals(getGameMode(), "Simple"))){
+        System.out.println("SOS Made in Simple Game");
+      }
       //Check for SOS formation
       //Check for game over based on game mode
       changePlayerTurn();
@@ -143,12 +147,91 @@ public class SOSGame{
     return p1GeneralGameScore;//temporary placeholder return
   }
 
-  private boolean isSOSFormed(){
+  private boolean isSOSFormed(int row, int col, String moveContent){
     //To Do
-    //Check if an SOS was formed
+    //Check if an SOS was formed by the current move
+    int minRowIndex = 0;
+    int maxRowIndex = getBoardSize() - 1;
+    int minColIndex = 0;
+    int maxColIndex = getBoardSize() - 1;
+
+    switch(moveContent){
+      case "S"://Check row-2 cells subarray on all sides of the cell
+        break;
+      case "O"://Check row-1 cells subarray around the cell
+        //If an "O" is placed in a corner, it is impossible to have formed an SOS
+        if(((row == 0)&&(col == 0))||(row == 0)&&(col == getBoardSize() - 1)||((row == getBoardSize() - 1)&&(col == 0))||((row == getBoardSize() - 1)&&(col == getBoardSize() - 1))){
+          return false;
+        }
+
+        //Set valid indices for sub rows
+        if((row - 1) > minRowIndex){
+          minRowIndex = row - 1;
+        }
+        else if((row + 1) < maxRowIndex){
+          maxRowIndex = row + 1;
+        }
+
+        //Set valid indices for sub columns
+        if((col - 1) > minColIndex){
+          minRowIndex = col - 1;
+        }
+        else if((col + 1) < maxColIndex){
+          maxColIndex = col;
+        }
+
+        for(int i = minRowIndex; i <= maxRowIndex; i++){
+          for(int j = minColIndex; j <= maxColIndex; j++){
+            if(Objects.equals(gameBoard.get(i).get(j).getContent(), "S")){
+              System.out.println("Checking cell: (" + i + "," + j + ")");
+              int symCellRow = 0;
+              int symCellCol = 0;
+
+              switch(row - i){
+                case -1:
+                  symCellRow = row - 1;
+                  break;
+                case 0:
+                  symCellRow = row;
+                  break;
+                case 1:
+                  symCellRow = row + 1;
+                  break;
+                default:
+                  break;
+              }
+
+              switch(col - i){
+                case -1:
+                  symCellCol = col - 1;
+                  break;
+                case 0:
+                  symCellCol = col;
+                  break;
+                case 1:
+                  symCellCol = col + 1;
+                  break;
+                default:
+                  break;
+              }
+
+              System.out.println("SymCellRow: " + symCellRow);
+              System.out.println("SymCellCol: " + symCellCol);
+
+              if(Objects.equals(gameBoard.get(symCellRow).get(symCellCol).getContent(), "S")){
+                return true;
+              }
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
+    return false;
   }
 
-  private boolean isGameOver(){
+  private void gameOver(){
     //To Do
     //Check if the game is over
     //This function may change or be removed entirely
