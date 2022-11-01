@@ -104,11 +104,10 @@ public class SOSGame{
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
-      /*
+
       if(isSOSFormed(row,col,moveContent) && (Objects.equals(getGameMode(), "Simple"))){
         System.out.println("SOS Made in Simple Game");
       }
-      */
       //Check for SOS formation
       //Check for game over based on game mode
       changePlayerTurn();
@@ -150,6 +149,7 @@ public class SOSGame{
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
+    //######Getting indexing errors from this function######
     //To Do
     //Check if an SOS was formed by the current move
     int minRowIndex = 0;
@@ -182,6 +182,11 @@ public class SOSGame{
           maxColIndex = col;
         }
 
+        System.out.println("Min row: " + minRowIndex);
+        System.out.println("Max row: " + maxRowIndex);
+        System.out.println("Min col: " + minColIndex);
+        System.out.println("Max col: " + maxColIndex);
+
         for(int i = minRowIndex; i <= maxRowIndex; i++){
           for(int j = minColIndex; j <= maxColIndex; j++){
             if(Objects.equals(gameBoard.get(i).get(j).getContent(), "S")){
@@ -191,27 +196,41 @@ public class SOSGame{
 
               switch(row - i){
                 case -1:
-                  oppCellRow = row - 1;
+                  if((row - 1) > 0){
+                    oppCellRow = row - 1;
+                  }
                   break;
                 case 0:
                   oppCellRow = row;
                   break;
                 case 1:
-                  oppCellRow = row + 1;
+                  if((row + 1) >= getBoardSize()){
+                    oppCellRow = getBoardSize() - 1;
+                  }
+                  else{
+                    oppCellRow = row + 1;
+                  }
                   break;
                 default:
                   break;
               }
 
-              switch(col - i){
+              switch(col - j){
                 case -1:
-                  oppCellCol = col - 1;
+                  if((col - 1) > 0){
+                    oppCellCol = col - 1;
+                  }
                   break;
                 case 0:
                   oppCellCol = col;
                   break;
                 case 1:
-                  oppCellCol = col + 1;
+                  if((col + 1) >= getBoardSize()){
+                    oppCellCol = getBoardSize() - 1;
+                  }
+                  else{
+                    oppCellCol = col + 1;
+                  }
                   break;
                 default:
                   break;
