@@ -154,8 +154,9 @@ public class SOSGame{
         return p1GeneralGameScore;
       case PL2:
         return p2GeneralGameScore;
+      default:
+        return -1;
     }
-    return -1;
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
