@@ -87,7 +87,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     else if(e.getSource() == player1MoveS){
       p1MoveChar = "S";
     }
-    else if(e.getSource() == p2MoveChar){
+    else if(e.getSource() == player2MoveS){
       p2MoveChar = "S";
     }
     else if(e.getSource() == player1MoveO){
