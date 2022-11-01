@@ -105,12 +105,13 @@ public class SOSGame{
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
 
-      if(isSOSFormed(row,col,moveContent) && (Objects.equals(getGameMode(), "Simple"))){
+      if(isSOSFormed(row,col,moveContent)){
         System.out.println("SOS Made in Simple Game");
+        isGameOver(gameMode);
       }
-      //Check for SOS formation
-      //Check for game over based on game mode
-      changePlayerTurn();
+      else{
+        changePlayerTurn();
+      }
       return 0;
     }
     return -1;
@@ -149,8 +150,6 @@ public class SOSGame{
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
-    //######Getting indexing errors from this function######
-    //To Do
     //Check if an SOS was formed by the current move
     int minRowIndex = 0;
     int maxRowIndex = getBoardSize() - 1;
@@ -176,22 +175,17 @@ public class SOSGame{
         }
 
         //Starting and ending indices are adjusted in the loops, so it doesn't iterate over cells unnecessarily
-        for(int i = minRowIndex + 1; i <= maxRowIndex - 1; i++){
-          for(int j = minColIndex + 1; j <= maxColIndex - 1; j++){
+        for(int i = minRowIndex; i <= maxRowIndex; i++) {
+          for (int j = minColIndex; j <= maxColIndex; j++) {
             //Check surrounding cells for "O" content, then check 1 cell beyond for "S" content
-            //Need to figure out how to efficiently check cells
-            //Don't want to have to "if" every possible configuration
+
             if(Objects.equals(gameBoard.get(i).get(j).getContent(), "O")){
-              //Check 1 cell beyond in the CORRECT direction for "S" content
-              switch(row-i){//Check cell row orientation relative to move cell
-                case -1://Row above move cell
-                  break;
-                case 0://Same row as move cell
-                  break;
-                case 1://Row below move cell
-                  break;
-                default:
-                  break;
+              //Create variables for determining which extended cell to check
+              int extendedRowIndex = i + (i - row);
+              int extendedColIndex = j + (j - col);
+
+              if((extendedRowIndex >= minRowIndex) && (extendedRowIndex <= maxRowIndex) && (extendedColIndex >= minColIndex) && (extendedColIndex <= maxColIndex) && Objects.equals(gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")){
+                return true;
               }
             }
           }
@@ -219,19 +213,13 @@ public class SOSGame{
           maxColIndex = col;
         }
 
-        System.out.println("Min row: " + minRowIndex);
-        System.out.println("Max row: " + maxRowIndex);
-        System.out.println("Min col: " + minColIndex);
-        System.out.println("Max col: " + maxColIndex);
-
         for(int i = minRowIndex; i <= maxRowIndex; i++){
-          for(int j = minColIndex; j <= maxColIndex; j++){
+          for(int j = minColIndex; j <= maxColIndex; j++){//Check surrounding cells for "S" content
             if(Objects.equals(gameBoard.get(i).get(j).getContent(), "S")){
-              System.out.println("Checking cell: (" + i + "," + j + ")");
               int oppCellRow = 0;
               int oppCellCol = 0;
 
-              switch(row - i){
+              switch(row - i){//Determine cell row to check
                 case -1:
                   if((row - 1) > 0){
                     oppCellRow = row - 1;
@@ -252,7 +240,7 @@ public class SOSGame{
                   break;
               }
 
-              switch(col - j){
+              switch(col - j){//Determine cell column to check
                 case -1:
                   if((col - 1) > 0){
                     oppCellCol = col - 1;
@@ -273,9 +261,6 @@ public class SOSGame{
                   break;
               }
 
-              System.out.println("oppCellRow: " + oppCellRow);
-              System.out.println("oppCellCol: " + oppCellCol);
-
               if(Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")){
                 return true;
               }
@@ -289,9 +274,12 @@ public class SOSGame{
     return false;
   }
 
-  private void gameOver(){
+  private void isGameOver(Mode currentMode){
     //To Do
     //Check if the game is over
     //This function may change or be removed entirely
+    if(gameMode == Mode.SIMPLE){
+
+    }
   }
 }
