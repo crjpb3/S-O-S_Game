@@ -159,6 +159,43 @@ public class SOSGame{
 
     switch(moveContent){
       case "S"://Check row+/-2 cells subarray on all sides of the cell
+        //Set subarray min/max row indices
+        if((row - 2) > 0){
+          minRowIndex = row - 2;
+        }
+        if((row + 2) < getBoardSize() - 1){
+          maxRowIndex = row + 2;
+        }
+
+        //set subarray min/max column indices
+        if((col - 2) > 0){
+          minColIndex = col - 2;
+        }
+        if((col + 2) < getBoardSize() - 1){
+          maxColIndex = col + 2;
+        }
+
+        //Starting and ending indices are adjusted in the loops, so it doesn't iterate over cells unnecessarily
+        for(int i = minRowIndex + 1; i <= maxRowIndex - 1; i++){
+          for(int j = minColIndex + 1; j <= maxColIndex - 1; j++){
+            //Check surrounding cells for "O" content, then check 1 cell beyond for "S" content
+            //Need to figure out how to efficiently check cells
+            //Don't want to have to "if" every possible configuration
+            if(Objects.equals(gameBoard.get(i).get(j).getContent(), "O")){
+              //Check 1 cell beyond in the CORRECT direction for "S" content
+              switch(row-i){//Check cell row orientation relative to move cell
+                case -1://Row above move cell
+                  break;
+                case 0://Same row as move cell
+                  break;
+                case 1://Row below move cell
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+        }
         break;
       case "O"://Check row+/-1 cells subarray around the cell
         //If an "O" is placed in a corner, it is impossible to have formed an SOS
