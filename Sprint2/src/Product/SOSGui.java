@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -107,8 +108,20 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
-          if(playerTurn == "Player 1") {
+          if(Objects.equals(playerTurn, "Player 1")) {
             currentGame.makeMove(i, j, p1MoveChar);
+            if(currentGame.getBeginRowIndex(i,j) > -1){
+              if(currentGame.getCellOwnerID(i,j) == 0){
+                //blue line for player 1
+              }
+              else if(currentGame.getCellOwnerID(i,j) == 1){
+                //red line for player 2
+              }
+              int beginRow = currentGame.getBeginRowIndex(i,j);
+              int beginCol = currentGame.getBeginColIndex(i,j);
+              int endRow = currentGame.getEndRowIndex(i,j);
+              int endCol = currentGame.getEndColIndex(i,j);
+            }
             boardCellsList.get(i).get(j).setText(p1MoveChar);
           }
           else{
