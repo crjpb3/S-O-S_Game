@@ -140,7 +140,12 @@ public class SOSGame{
   }
 
   private void updateGeneralGameScore(Turn playerTurn){
-    //To Do
+    if(playerTurn == Turn.PL1){
+      p1GeneralGameScore++;
+    }
+    else{
+      p2GeneralGameScore++;
+    }
   }
 
   public int getGeneralGameScore(Turn playerTurn){
