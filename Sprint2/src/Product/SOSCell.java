@@ -2,10 +2,12 @@ package Product;
 
 public class SOSCell{
   private String currentContent;
-  private boolean isSOS = false;
   private int cellOwnerID = -1;
-  private int beginIndexOfSOS = -1;
-  private int endIndexOfSOS = -1;
+  private int beginRowIndex = -1;
+  private int endRowIndex = -1;
+  private int beginColIndex = -1;
+  private int endColIndex = -1;
+
   public SOSCell(){
     this.setContent("");
   }
@@ -22,19 +24,6 @@ public class SOSCell{
     return currentContent;
   }
 
-  public void setIsSOS(){
-    if(isSOS){
-      isSOS = false;
-    }
-    else{
-      isSOS = true;
-    }
-  }
-
-  public boolean isSOS(){
-    return isSOS;
-  }
-
   public void setCellOwner(int playerID){
     cellOwnerID = playerID;
   }
@@ -43,19 +32,29 @@ public class SOSCell{
     return cellOwnerID;
   }
 
-  public void setBeginIndexOfSOS(int beginIndex){
-    beginIndexOfSOS = beginIndex;
+  public void setBeginIndexOfSOS(int row, int col){
+    beginRowIndex = row;
+    beginColIndex = col;
   }
 
-  public void setEndIndexOfSOS(int endIndex){
-    endIndexOfSOS = endIndex;
+  public void setEndIndexOfSOS(int row, int col){
+    endRowIndex = row;
+    endColIndex = col;
   }
 
-  public int getBeginIndexOfSOS(){
-    return beginIndexOfSOS;
+  public int getBeginRowIndex(){
+    return beginRowIndex;
   }
 
-  public int getEndIndexOfSOS(){
-    return endIndexOfSOS;
+  public int getEndRowIndex(){
+    return endRowIndex;
+  }
+
+  public int getBeginColIndex(){
+    return beginColIndex;
+  }
+
+  public int getEndColIndex(){
+    return endColIndex;
   }
 }
