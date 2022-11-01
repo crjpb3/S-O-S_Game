@@ -105,9 +105,16 @@ public class SOSGame{
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
 
+      if(Objects.equals(getPlayerTurn(), "Player 1")){
+        gameBoard.get(row).get(col).setCellOwner(0);
+      }
+      else{
+        gameBoard.get(row).get(col).setCellOwner(1);
+      }
+
       if(isSOSFormed(row,col,moveContent)){
         System.out.println("SOS Made in Simple Game");
-        isGameOver(gameMode);
+        //isGameOver(gameMode);
       }
       else{
         changePlayerTurn();
@@ -195,6 +202,8 @@ public class SOSGame{
               int extendedColIndex = j + (j - col);
 
               if((extendedRowIndex >= minRowIndex) && (extendedRowIndex <= maxRowIndex) && (extendedColIndex >= minColIndex) && (extendedColIndex <= maxColIndex) && Objects.equals(gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")){
+                gameBoard.get(row).get(col).setBeginIndexOfSOS(extendedRowIndex,extendedColIndex);
+                gameBoard.get(row).get(col).setEndIndexOfSOS(row,col);
                 return true;
               }
             }
@@ -272,6 +281,8 @@ public class SOSGame{
               }
 
               if(Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")){
+                gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
+                gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow,oppCellCol);
                 return true;
               }
             }
