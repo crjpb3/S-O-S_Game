@@ -15,6 +15,7 @@ public class SOSGame{
   public enum Turn {PL1, PL2}
   Turn currentTurn = Turn.PL1;
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
+  private int unoccupiedCellsCount = 0;
   private int boardSize;
   public <T> SOSGame(T size, int mode){
     resetGame(size, mode);
@@ -24,38 +25,33 @@ public class SOSGame{
     p1GeneralGameScore = 0;
     p2GeneralGameScore = 0;
     setBoardSize(size);
+    setUnoccupiedCellsCount(getBoardSize());
     setGameMode(mode);
     initBoard();
     setGameStatus(Status.PLAYING);
   }
 
   private <T> void setBoardSize(T size){
-    switch(size.getClass().getSimpleName()){
-      case "Integer":
-        int intSize = (int)size;
-        if(intSize < 3){
+    switch (size.getClass().getSimpleName()) {
+      case "Integer" -> {
+        int intSize = (int) size;
+        if (intSize < 3) {
           boardSize = 3;
-        }
-        else if(intSize > 10){
+        } else if (intSize > 10) {
           boardSize = 10;
+        } else {
+          boardSize = (int) size;
         }
-        else{
-          boardSize = (int)size;
-        }
-        break;
-      case "Double":
-      case "Float":
-        double dblSize = (double)size;
-        if(dblSize >= 3 && dblSize <= 11){
-          boardSize = (int)floor((double)size);
-        }
-        else{
+      }
+      case "Double", "Float" -> {
+        double dblSize = (double) size;
+        if (dblSize >= 3 && dblSize <= 11) {
+          boardSize = (int) floor((double) size);
+        } else {
           boardSize = 3;
         }
-        break;
-      default:
-        boardSize = 3;
-        break;
+      }
+      default -> boardSize = 3;
     }
   }
 
@@ -73,13 +69,15 @@ public class SOSGame{
   }
 
   private void setGameStatus(Status newStatus){
-   //To Do
+    switch(newStatus){
+      case P1_WIN -> gameStatus = Status.P1_WIN;
+      case P2_WIN -> gameStatus = Status.P2_WIN;
+      case DRAW -> gameStatus = Status.DRAW;
+      default -> gameStatus = Status.PLAYING;
+    }
   }
 
-  public Status getGameStatus(){
-    //To Do
-    return Status.PLAYING;//temporary placeholder return
-  }
+  public Status getGameStatus(){ return gameStatus; }
 
   private void setGameMode(int mode){
     if(mode == 1){
@@ -104,6 +102,7 @@ public class SOSGame{
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
       gameBoard.get(row).get(col).setContent(moveContent);
+      updateUnoccupiedCellsCount();
 
       if(Objects.equals(getPlayerTurn(), "Player 1")){
         gameBoard.get(row).get(col).setCellOwner(0);
@@ -112,14 +111,14 @@ public class SOSGame{
         gameBoard.get(row).get(col).setCellOwner(1);
       }
 
-      if(isSOSFormed(row,col,moveContent)){
-        System.out.println("SOS Made in Simple Game");
-        //isGameOver(gameMode);
+      if(isGameOver(row,col,moveContent,gameMode)){
+        //end game, return 1 to let the GUI know the game is over, so it can display game over notification
+        return 1;
       }
       else{
         changePlayerTurn();
+        return 0;
       }
-      return 0;
     }
     return -1;
   }
@@ -295,13 +294,53 @@ public class SOSGame{
     return false;
   }
 
-  private void isGameOver(Mode currentMode){
-    //To Do
-    //Check if the game is over
-    //This function may change or be removed entirely
-    if(gameMode == Mode.SIMPLE){
+  private boolean isGameOver(int row, int col, String moveContent, Mode gameMode){
+    boolean isSOS = isSOSFormed(row,col,moveContent);
 
+    if(isSOS && (gameMode == Mode.SIMPLE)){
+      switch (getPlayerTurn()) {
+        case "Player 1" -> setGameStatus(Status.P1_WIN);
+        case "Player 2" -> setGameStatus(Status.P2_WIN);
+      }
+      return true;
     }
+    else if(!isSOS && (gameMode == Mode.SIMPLE)){
+      if(getUnoccupiedCellsCount() == 0){
+        setGameStatus(Status.DRAW);
+        return true;
+      }
+    }
+    else if(isSOS && (gameMode == Mode.GENERAL)){
+      updateGeneralGameScore(currentTurn);
+
+      if(getUnoccupiedCellsCount() == 0){
+        if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
+          setGameStatus(Status.P1_WIN);
+          return true;
+        }
+        else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
+          setGameStatus(Status.P2_WIN);
+          return true;
+        }
+        else{
+          setGameStatus(Status.DRAW);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private void setUnoccupiedCellsCount(int boardSize){
+    unoccupiedCellsCount = boardSize*boardSize;
+  }
+
+  private int getUnoccupiedCellsCount(){
+    return unoccupiedCellsCount;
+  }
+
+  private void updateUnoccupiedCellsCount(){
+    unoccupiedCellsCount--;
   }
 
   public int getCellOwnerID(int row, int col){
