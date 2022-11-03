@@ -17,6 +17,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -61,6 +62,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private JTextField boardSizeInput;
 
   private JLabel currentTurnLabel;
+
+  //Game Over option pane
+  JOptionPane gameOver = new JOptionPane();
 
   public SOSGui(){
     boardCellsList = new ArrayList<>();
