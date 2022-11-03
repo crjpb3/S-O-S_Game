@@ -155,14 +155,10 @@ public class SOSGame{
   }
 
   public int getGeneralGameScore(Turn playerTurn){
-    switch(playerTurn){
-      case PL1:
-        return p1GeneralGameScore;
-      case PL2:
-        return p2GeneralGameScore;
-      default:
-        return -1;
-    }
+    return switch (playerTurn) {
+      case PL1 -> p1GeneralGameScore;
+      case PL2 -> p2GeneralGameScore;
+    };
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){

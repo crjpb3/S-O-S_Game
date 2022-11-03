@@ -1,5 +1,7 @@
 package Product;
 
+import Product.SOSGame.Status;
+import Product.SOSGame.Turn;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
