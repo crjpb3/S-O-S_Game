@@ -90,8 +90,7 @@ class SOSGameTest {
     assertEquals(0,Game.getGeneralGameScore(SOSGame.Turn.PL1));//Show Player 1 score equals 0 at start
     Game.makeMove(0,0, "S");//Player 1 move
     Game.makeMove(1,0, "S");//Player 2 move
-    Game.makeMove(0,1, "0");//Player 1 move
-    assertEquals(0,Game.getGeneralGameScore(SOSGame.Turn.PL1));//show Player 1 score equals 0 after several moves
+    Game.makeMove(0,1, "O");//Player 1 move
     Game.makeMove(2,0, "S");//Player 2 move
     Game.makeMove(0,2, "S");//Player 1 SOS completion move
     assertEquals(1,Game.getGeneralGameScore(SOSGame.Turn.PL1));//Show Player 1 score equals 1 after completing an SOS
@@ -103,7 +102,6 @@ class SOSGameTest {
     Game.makeMove(1,0, "S");//Player 1 move
     Game.makeMove(0,0, "S");//Player 2 move
     Game.makeMove(1,1, "S");//Player 1 move
-    assertEquals(0,Game.getGeneralGameScore(SOSGame.Turn.PL2));//show Player 2 score equals 0 after several moves
     Game.makeMove(0,1, "O");//Player 2 move
     Game.makeMove(2,0, "S");//Player 1 move
     Game.makeMove(0,2, "S");//Player 2 SOS completion move
