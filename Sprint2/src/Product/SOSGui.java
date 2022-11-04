@@ -1,7 +1,6 @@
 package Product;
 
 import Product.SOSGame.Status;
-import Product.SOSGame.Turn;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,7 +27,7 @@ import javax.swing.SwingConstants;
 public class SOSGui extends JFrame implements ActionListener, MouseListener {
   SOSGame currentGame;
   private ArrayList<ArrayList<JLabel>> boardCellsList;
-  private String playerTurn;
+  private SOSGame.Turn playerTurn;
   private String p1MoveChar = "S";
   private String p2MoveChar = "S";
   private int gameModeSelection;
@@ -133,6 +132,31 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           else{
             currentGame.makeMove(i, j, p2MoveChar);
             boardCellsList.get(i).get(j).setText(p2MoveChar);
+          }
+          //Check game status for game over and display appropriate notification
+          String[] gameOverOptionsList = {"Exit Game","New Game"};
+          int gameOverOptionSelection = 2;
+          if(currentGame.getGameStatus() == Status.DRAW){
+            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "The game is a draw!", "DRAW", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          }
+          else if(currentGame.getGameStatus() == Status.P1_WIN){
+            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "Player 1 wins!", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          }
+          else if(currentGame.getGameStatus() == Status.P2_WIN){
+            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "Player 2 wins!", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          }
+
+          //Check user's game over choice
+          if(gameOverOptionSelection == 0){
+            System.exit(0);
+          }
+          else if(gameOverOptionSelection == 1){
+            //resetBoard(3);
+            //startGame();
+            createPreviewBoard();
+          }
+          else{
+            System.out.println(gameOverOptionSelection);
           }
           playerTurn = currentGame.getPlayerTurn();
           currentTurnLabel.setText("Turn: " + playerTurn);
