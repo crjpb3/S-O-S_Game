@@ -1,6 +1,7 @@
 package Product;
 
 import Product.SOSGame.Status;
+import Product.SOSGame.Turn;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,8 +36,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private String p2MoveChar = "S";
   private int gameModeSelection;
 
-  //Panels declarations
+  //GUI components declarations
   private Font cellFont;
+
   private JPanel Board;
   private JPanel Left;
   private JPanel Right;
@@ -45,7 +47,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private JButton startButton;
   private JButton resetButton;
 
-  //Options items declarations
   private JLabel gameModeLabel;
   private JRadioButton simpleGameModeOption;
   private JRadioButton generalGameModeOption;
@@ -64,7 +65,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private JLabel boardSizeLabel;
   private JTextField boardSizeInput;
-
   private JLabel currentTurnLabel;
 
   //Game Over option pane
@@ -80,7 +80,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     if(e.getSource() == startButton) {
-      //Pass gameModeSelection, boardSize for start game; set playerTurn to "Player 1"
       startGame();
       Top.remove(startButton);
       Top.add(resetButton);
@@ -120,6 +119,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
         if(e.getSource() == boardCellsList.get(i).get(j)){
           if(currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
             currentGame.makeMove(i, j, p1MoveChar);
+            //Code for drawing lines through completed SOS
+            int beginRow = currentGame.getBeginRowIndex(i,j);
+            int beginCol = currentGame.getBeginColIndex(i,j);
+            int endRow = currentGame.getEndRowIndex(i,j);
+            int endCol = currentGame.getEndColIndex(i,j);
             if(currentGame.getBeginRowIndex(i,j) > -1){
               if(currentGame.getCellOwnerID(i,j) == 0){
                 //blue line for player 1
@@ -127,10 +131,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
               else if(currentGame.getCellOwnerID(i,j) == 1){
                 //red line for player 2
               }
-              int beginRow = currentGame.getBeginRowIndex(i,j);
-              int beginCol = currentGame.getBeginColIndex(i,j);
-              int endRow = currentGame.getEndRowIndex(i,j);
-              int endCol = currentGame.getEndColIndex(i,j);
             }
             boardCellsList.get(i).get(j).setText(p1MoveChar);
           }
@@ -145,10 +145,10 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
             gameOverOptionSelection = JOptionPane.showOptionDialog(this, "The game is a draw!", "DRAW", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
           }
           else if(currentGame.getGameStatus() == Status.P1_WIN){
-            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "Player 1 wins!", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "<html><font color=blue>Player 1</font> wins!</html>", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
           }
           else if(currentGame.getGameStatus() == Status.P2_WIN){
-            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "Player 2 wins!", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+            gameOverOptionSelection = JOptionPane.showOptionDialog(this, "<html><font color=red>Player 2</font> wins!</html>", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
           }
 
           //Check user's game over choice
@@ -158,12 +158,18 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           else if(gameOverOptionSelection == 1){
             Top.remove(resetButton);
             Top.add(startButton);
-            Top.remove(currentTurnLabel);
             Top.updateUI();
+            Bottom.remove(currentTurnLabel);
+            Bottom.updateUI();
             createPreviewBoard();
           }
           playerTurn = currentGame.getPlayerTurn();
-          currentTurnLabel.setText("Turn: " + playerTurn);
+          if(playerTurn == Turn.PL1){
+            currentTurnLabel.setText("<html>Turn: <font color=blue>Player 1</font></html>");
+          }
+          else{
+            currentTurnLabel.setText("<html>Turn: <font color=red>Player 2</font></html>");
+          }
         }
       }
     }
@@ -188,28 +194,38 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardSizeInput = new JTextField("3",2);
     
     //Left panel Components
-    player1SectionLabel = new JLabel("Player 1");
+    player1SectionLabel = new JLabel("<html><font color=blue>Player 1</font></html>");
     player1MoveS = new JRadioButton("S", true);
     player1MoveS.addActionListener(this);
     player1MoveO = new JRadioButton("O", false);
     player1MoveO.addActionListener(this);
+
     moveGroupPlayer1 = new ButtonGroup();
     moveGroupPlayer1.add(player1MoveS);
     moveGroupPlayer1.add(player1MoveO);
+
+    player1SectionLabel.setHorizontalAlignment(JLabel.CENTER);
+    player1MoveS.setHorizontalAlignment(JRadioButton.CENTER);
+    player1MoveO.setHorizontalAlignment(JRadioButton.CENTER);
     
     //Right panel components
-    player2SectionLabel = new JLabel("Player 2");
+    player2SectionLabel = new JLabel("<html><font color=red>Player 2</font></html>");
     player2MoveS = new JRadioButton("S", true);
     player2MoveS.addActionListener(this);
     player2MoveO = new JRadioButton("O", false);
     player2MoveO.addActionListener(this);
+
     moveGroupPlayer2 = new ButtonGroup();
     moveGroupPlayer2.add(player2MoveS);
     moveGroupPlayer2.add(player2MoveO);
+
+    player2SectionLabel.setHorizontalAlignment(JLabel.CENTER);
+    player2MoveS.setHorizontalAlignment(JRadioButton.CENTER);
+    player2MoveO.setHorizontalAlignment(JRadioButton.CENTER);
     
     //Bottom panel components
     Font turnLabelFont = new Font(null, Font.PLAIN, 25);
-    currentTurnLabel = new JLabel();
+    currentTurnLabel = new JLabel("<html>Turn: <font color=blue>Player 1</font></html>");
     currentTurnLabel.setFont(turnLabelFont);
   }
 
@@ -217,7 +233,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Board = new JPanel();
     Board.setPreferredSize(new Dimension(100,100));
 
-    Top = new JPanel(new FlowLayout());
+    Top = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 35));
     Top.setPreferredSize(new Dimension(800,100));
     Top.add(gameModeLabel);
     Top.add(simpleGameModeOption);
@@ -238,7 +254,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Right.add(player2MoveS);
     Right.add(player2MoveO);
 
-    Bottom = new JPanel();
+    Bottom = new JPanel(new FlowLayout(FlowLayout.CENTER,0,35));
     Bottom.setPreferredSize(new Dimension(800,100));
   }
 
@@ -247,7 +263,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(800,800);
     this.setVisible(true);
-    this.setLayout(new BorderLayout(10,10));
+    this.setLayout(new BorderLayout());
 
     this.add(Board, BorderLayout.CENTER);
     this.add(Left, BorderLayout.WEST);
@@ -321,7 +337,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       }
     }
     playerTurn = currentGame.getPlayerTurn();
-    currentTurnLabel.setText("Turn: " + playerTurn);
+    currentTurnLabel.setText("<html>Turn: <font color=blue>Player 1</font></html>");
     boardSizeInput.setText(Integer.toString(currentGame.getBoardSize()));
   }
 
