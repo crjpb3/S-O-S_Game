@@ -10,12 +10,12 @@ public class SOSGame{
   Status gameStatus;
   public enum Mode {SIMPLE, GENERAL}
   Mode gameMode;
-  private int p1GeneralGameScore = 0;
-  private int p2GeneralGameScore = 0;
+  private int p1GeneralGameScore;
+  private int p2GeneralGameScore;
   public enum Turn {PL1, PL2}
   Turn currentTurn = Turn.PL1;
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
-  private int unoccupiedCellsCount = 0;
+  private int unoccupiedCellsCount;
   private int boardSize;
   public <T> SOSGame(T size, int mode){
     resetGame(size, mode);
@@ -24,6 +24,16 @@ public class SOSGame{
   public <T> void resetGame(T size, int mode){
     p1GeneralGameScore = 0;
     p2GeneralGameScore = 0;
+
+    //Destroy existing gameBoard
+    for(int i = 0; i < gameBoard.size(); i++){
+      for(int j = 0; j < gameBoard.get(i).size(); j++){
+        gameBoard.get(i).clear();
+      }
+      gameBoard.clear();
+    }
+
+    setPlayerTurn(Turn.PL1);
     setBoardSize(size);
     setUnoccupiedCellsCount(getBoardSize());
     setGameMode(mode);
@@ -130,6 +140,10 @@ public class SOSGame{
     return false;
   }
 
+  private void setPlayerTurn(Turn playerTurn){
+    currentTurn = playerTurn;
+  }
+
   private void changePlayerTurn(){
     if(currentTurn == Turn.PL1){
       currentTurn = Turn.PL2;
@@ -146,7 +160,7 @@ public class SOSGame{
   }
 
   private void updateGeneralGameScore(Turn playerTurn){
-    if(playerTurn == Turn.PL1){
+    if(Objects.equals(getPlayerTurn(), "Player 1")){
       p1GeneralGameScore++;
     }
     else{
@@ -168,74 +182,77 @@ public class SOSGame{
     int minColIndex = 0;
     int maxColIndex = getBoardSize() - 1;
 
-    switch(moveContent){
-      case "S"://Check row+/-2 cells subarray on all sides of the cell
+    switch (moveContent) {
+      case "S" -> {//Check row+/-2 cells subarray on all sides of the cell
         //Set subarray min/max row indices
-        if((row - 2) > 0){
+        if ((row - 2) > 0) {
           minRowIndex = row - 2;
         }
-        if((row + 2) < getBoardSize() - 1){
+        if ((row + 2) < getBoardSize() - 1) {
           maxRowIndex = row + 2;
         }
 
         //set subarray min/max column indices
-        if((col - 2) > 0){
+        if ((col - 2) > 0) {
           minColIndex = col - 2;
         }
-        if((col + 2) < getBoardSize() - 1){
+        if ((col + 2) < getBoardSize() - 1) {
           maxColIndex = col + 2;
         }
 
         //Starting and ending indices are adjusted in the loops, so it doesn't iterate over cells unnecessarily
-        for(int i = minRowIndex; i <= maxRowIndex; i++) {
+        for (int i = minRowIndex; i <= maxRowIndex; i++) {
           for (int j = minColIndex; j <= maxColIndex; j++) {
             //Check surrounding cells for "O" content, then check 1 cell beyond for "S" content
 
-            if(Objects.equals(gameBoard.get(i).get(j).getContent(), "O")){
+            if (Objects.equals(gameBoard.get(i).get(j).getContent(), "O")) {
               //Create variables for determining which extended cell to check
               int extendedRowIndex = i + (i - row);
               int extendedColIndex = j + (j - col);
 
-              if((extendedRowIndex >= minRowIndex) && (extendedRowIndex <= maxRowIndex) && (extendedColIndex >= minColIndex) && (extendedColIndex <= maxColIndex) && Objects.equals(gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")){
-                gameBoard.get(row).get(col).setBeginIndexOfSOS(extendedRowIndex,extendedColIndex);
-                gameBoard.get(row).get(col).setEndIndexOfSOS(row,col);
+              if ((extendedRowIndex >= minRowIndex) && (extendedRowIndex <= maxRowIndex) && (
+                  extendedColIndex >= minColIndex) && (extendedColIndex <= maxColIndex)
+                  && Objects.equals(
+                  gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")) {
+                gameBoard.get(row).get(col).setBeginIndexOfSOS(extendedRowIndex, extendedColIndex);
+                gameBoard.get(row).get(col).setEndIndexOfSOS(row, col);
                 return true;
               }
             }
           }
         }
-        break;
-      case "O"://Check row+/-1 cells subarray around the cell
+      }
+      case "O" -> {//Check row+/-1 cells subarray around the cell
         //If an "O" is placed in a corner, it is impossible to have formed an SOS
-        if(((row == 0)&&(col == 0))||(row == 0)&&(col == getBoardSize() - 1)||((row == getBoardSize() - 1)&&(col == 0))||((row == getBoardSize() - 1)&&(col == getBoardSize() - 1))){
+        if (((row == 0) && (col == 0)) || (row == 0) && (col == getBoardSize() - 1) || (
+            (row == getBoardSize() - 1) && (col == 0)) || ((row == getBoardSize() - 1) && (col
+            == getBoardSize() - 1))) {
           return false;
         }
 
         //Set valid indices for sub rows
-        if((row - 1) > minRowIndex){
+        if ((row - 1) > minRowIndex) {
           minRowIndex = row - 1;
-        }
-        else if((row + 1) < maxRowIndex){
+        } else if ((row + 1) < maxRowIndex) {
           maxRowIndex = row + 1;
         }
 
         //Set valid indices for sub columns
-        if((col - 1) > minColIndex){
+        if ((col - 1) > minColIndex) {
           minRowIndex = col - 1;
-        }
-        else if((col + 1) < maxColIndex){
+        } else if ((col + 1) < maxColIndex) {
           maxColIndex = col;
         }
-
-        for(int i = minRowIndex; i <= maxRowIndex; i++){
-          for(int j = minColIndex; j <= maxColIndex; j++){//Check surrounding cells for "S" content
-            if(Objects.equals(gameBoard.get(i).get(j).getContent(), "S")){
+        for (int i = minRowIndex; i <= maxRowIndex; i++) {
+          for (int j = minColIndex; j <= maxColIndex;
+              j++) {//Check surrounding cells for "S" content
+            if (Objects.equals(gameBoard.get(i).get(j).getContent(), "S")) {
               int oppCellRow = 0;
               int oppCellCol = 0;
 
-              switch(row - i){//Determine cell row to check
+              switch (row - i) {//Determine cell row to check
                 case -1:
-                  if((row - 1) > 0){
+                  if ((row - 1) > 0) {
                     oppCellRow = row - 1;
                   }
                   break;
@@ -243,10 +260,9 @@ public class SOSGame{
                   oppCellRow = row;
                   break;
                 case 1:
-                  if((row + 1) >= getBoardSize()){
+                  if ((row + 1) >= getBoardSize()) {
                     oppCellRow = getBoardSize() - 1;
-                  }
-                  else{
+                  } else {
                     oppCellRow = row + 1;
                   }
                   break;
@@ -254,9 +270,9 @@ public class SOSGame{
                   break;
               }
 
-              switch(col - j){//Determine cell column to check
+              switch (col - j) {//Determine cell column to check
                 case -1:
-                  if((col - 1) > 0){
+                  if ((col - 1) > 0) {
                     oppCellCol = col - 1;
                   }
                   break;
@@ -264,10 +280,9 @@ public class SOSGame{
                   oppCellCol = col;
                   break;
                 case 1:
-                  if((col + 1) >= getBoardSize()){
+                  if ((col + 1) >= getBoardSize()) {
                     oppCellCol = getBoardSize() - 1;
-                  }
-                  else{
+                  } else {
                     oppCellCol = col + 1;
                   }
                   break;
@@ -275,17 +290,15 @@ public class SOSGame{
                   break;
               }
 
-              if(Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")){
+              if (Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")) {
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
-                gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow,oppCellCol);
+                gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
                 return true;
               }
             }
           }
         }
-        break;
-      default:
-        break;
+      }
     }
     return false;
   }
@@ -300,28 +313,29 @@ public class SOSGame{
       }
       return true;
     }
-    else if(!isSOS && (gameMode == Mode.SIMPLE)){
+    else if(!isSOS && (Objects.equals(getGameMode(), "Simple"))){
       if(getUnoccupiedCellsCount() == 0){
         setGameStatus(Status.DRAW);
         return true;
       }
     }
-    else if(isSOS && (gameMode == Mode.GENERAL)){
+    else if(isSOS && (Objects.equals(getGameMode(), "General"))){
       updateGeneralGameScore(currentTurn);
+    }
 
-      if(getUnoccupiedCellsCount() == 0){
-        if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
-          setGameStatus(Status.P1_WIN);
-          return true;
-        }
-        else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
-          setGameStatus(Status.P2_WIN);
-          return true;
-        }
-        else{
-          setGameStatus(Status.DRAW);
-          return true;
-        }
+    //Checks for General game over and appropriate status update
+    if(getUnoccupiedCellsCount() == 0){
+      if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
+        setGameStatus(Status.P1_WIN);
+        return true;
+      }
+      else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
+        setGameStatus(Status.P2_WIN);
+        return true;
+      }
+      else{
+        setGameStatus(Status.DRAW);
+        return true;
       }
     }
     return false;
