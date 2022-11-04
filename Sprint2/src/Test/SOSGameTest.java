@@ -61,24 +61,24 @@ class SOSGameTest {
     assertTrue(Game.isCellEmpty(0,0));
     Game.makeMove(0,0, "S");
     assertFalse(Game.isCellEmpty(0,0));
-    assertEquals("Player 2", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
     //AC 4.3 & 6.5
     assertEquals(-1, Game.makeMove(0,0, "S"));
-    assertEquals("Player 2", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL2, Game.getPlayerTurn());
 
     //AC 4.2 & 6.2
     Game.makeMove(0,1, "S");
     assertFalse(Game.isCellEmpty(0,1));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
     //AC 4.3 & 6.5
     assertEquals(-1, Game.makeMove(0,1, "S"));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
 
     //AC 4.4 & 6.6
     assertEquals(-1, Game.makeMove(-5,0, "S"));
     assertEquals(-1, Game.makeMove(0,5, "S"));
     assertEquals(-1, Game.makeMove(5,0, "S"));
-    assertEquals("Player 1", Game.getPlayerTurn());
+    assertEquals(SOSGame.Turn.PL1, Game.getPlayerTurn());
   }
 
   @Test
