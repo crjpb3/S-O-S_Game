@@ -114,7 +114,7 @@ public class SOSGame{
       gameBoard.get(row).get(col).setContent(moveContent);
       updateUnoccupiedCellsCount();
 
-      if(Objects.equals(getPlayerTurn(), "Player 1")){
+      if(getPlayerTurn() == Turn.PL1){
         gameBoard.get(row).get(col).setCellOwner(0);
       }
       else{
@@ -122,7 +122,7 @@ public class SOSGame{
       }
 
       if(isGameOver(row,col,moveContent,gameMode)){
-        //end game, return 1 to let the GUI know the game is over, so it can display game over notification
+        //return 1 to let the GUI know the game is over, so it can display game over notification
         return 1;
       }
       else{
@@ -145,26 +145,21 @@ public class SOSGame{
   }
 
   private void changePlayerTurn(){
-    if(currentTurn == Turn.PL1){
+    if(getPlayerTurn() == Turn.PL1){
       currentTurn = Turn.PL2;
       return;
     }
     currentTurn = Turn.PL1;
   }
 
-  public String getPlayerTurn(){
-    if(currentTurn == Turn.PL1){
-      return "Player 1";
-    }
-    return "Player 2";
+  public Turn getPlayerTurn(){
+    return currentTurn;
   }
 
   private void updateGeneralGameScore(Turn playerTurn){
-    if(Objects.equals(getPlayerTurn(), "Player 1")){
-      p1GeneralGameScore++;
-    }
-    else{
-      p2GeneralGameScore++;
+    switch(playerTurn){
+      case PL1 -> p1GeneralGameScore++;
+      case PL2 -> p2GeneralGameScore++;
     }
   }
 
@@ -181,6 +176,7 @@ public class SOSGame{
     int maxRowIndex = getBoardSize() - 1;
     int minColIndex = 0;
     int maxColIndex = getBoardSize() - 1;
+    boolean isFormed = false;
 
     switch (moveContent) {
       case "S" -> {//Check row+/-2 cells subarray on all sides of the cell
@@ -216,7 +212,8 @@ public class SOSGame{
                   gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")) {
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(extendedRowIndex, extendedColIndex);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(row, col);
-                return true;
+                updateGeneralGameScore(getPlayerTurn());
+                isFormed = true;
               }
             }
           }
@@ -293,14 +290,15 @@ public class SOSGame{
               if (Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")) {
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
-                return true;
+                updateGeneralGameScore(getPlayerTurn());
+                isFormed = true;
               }
             }
           }
         }
       }
     }
-    return false;
+    return isFormed;
   }
 
   private boolean isGameOver(int row, int col, String moveContent, Mode gameMode){
@@ -308,8 +306,8 @@ public class SOSGame{
 
     if(isSOS && (gameMode == Mode.SIMPLE)){
       switch (getPlayerTurn()) {
-        case "Player 1" -> setGameStatus(Status.P1_WIN);
-        case "Player 2" -> setGameStatus(Status.P2_WIN);
+        case PL1 -> setGameStatus(Status.P1_WIN);
+        case PL2 -> setGameStatus(Status.P2_WIN);
       }
       return true;
     }
@@ -318,9 +316,6 @@ public class SOSGame{
         setGameStatus(Status.DRAW);
         return true;
       }
-    }
-    else if(isSOS && (Objects.equals(getGameMode(), "General"))){
-      updateGeneralGameScore(currentTurn);
     }
 
     //Checks for General game over and appropriate status update
