@@ -74,7 +74,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardCellsList = new ArrayList<>();
     initGUI();
     resetBoard(3);
-    createPreviewBoard(); //One time function to display board/game representation; "main screen"
+    createPreviewBoard();//One time function to display board/game representation; "main screen"
   }
 
   @Override
@@ -119,19 +119,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
         if(e.getSource() == boardCellsList.get(i).get(j)){
           if(currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
             currentGame.makeMove(i, j, p1MoveChar);
-            //Code for drawing lines through completed SOS
-            int beginRow = currentGame.getBeginRowIndex(i,j);
-            int beginCol = currentGame.getBeginColIndex(i,j);
-            int endRow = currentGame.getEndRowIndex(i,j);
-            int endCol = currentGame.getEndColIndex(i,j);
-            if(currentGame.getBeginRowIndex(i,j) > -1){
-              if(currentGame.getCellOwnerID(i,j) == 0){
-                //blue line for player 1
-              }
-              else if(currentGame.getCellOwnerID(i,j) == 1){
-                //red line for player 2
-              }
-            }
             boardCellsList.get(i).get(j).setText(p1MoveChar);
           }
           else{
@@ -169,6 +156,25 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           }
           else{
             currentTurnLabel.setText("<html>Turn: <font color=red>Player 2</font></html>");
+          }
+          //Code for drawing lines through completed SOS
+          int beginRow = currentGame.getBeginRowIndex(i,j);
+          int beginCol = currentGame.getBeginColIndex(i,j);
+          int endRow = currentGame.getEndRowIndex(i,j);
+          int endCol = currentGame.getEndColIndex(i,j);
+          if(currentGame.getBeginRowIndex(i,j) > -1){
+            if(currentGame.getCellOwnerID(i,j) == 0){
+              //blue line for player 1
+              paintLine(Board.getGraphics(), Color.BLACK, boardCellsList.get(beginRow).get(beginCol).getX(), boardCellsList.get(beginRow).get(beginCol).getY(), boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth(), boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight());
+              System.out.println("Line should paint here");
+              System.out.println("Begin: " + beginRow + "," + beginCol);
+              System.out.println("End: " + endRow + "," + endCol);
+              System.out.println("Begin Cell x,y: " + boardCellsList.get(beginRow).get(beginCol).getX() + "," + boardCellsList.get(beginRow).get(beginCol).getY());
+              System.out.println("End Cell x,y: " + boardCellsList.get(beginRow).get(beginCol).getX() + "," + boardCellsList.get(endRow).get(endCol).getY());
+            }
+            else if(currentGame.getCellOwnerID(i,j) == 1){
+              //red line for player 2
+            }
           }
         }
       }
@@ -262,6 +268,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     this.setTitle("SOS Game");
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setSize(800,800);
+    this.setResizable(false);
     this.setVisible(true);
     this.setLayout(new BorderLayout());
 
@@ -297,7 +304,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     //Initialize cell list
     destroyBoard();
     Board.setLayout(new GridLayout(boardSize,boardSize, 0,0));
-    cellFont = new Font(Font.SERIF, Font.BOLD, 25);
+    cellFont = new Font(Font.SERIF, Font.BOLD, 50);
 
     for(int i = 0; i < boardSize; i++){
       boardCellsList.add(new ArrayList<>());
@@ -356,6 +363,19 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardCellsList.get(2).get(0).setForeground(Color.BLUE);
   }
 
+  private void paintLine(Graphics g){
+    Graphics2D g2d = (Graphics2D)g;
+    g2d.setPaint(Color.BLACK);
+    g2d.setStroke(new BasicStroke(2));
+    g2d.drawLine(200,200,300,300);
+  }
+  private void paintLine(Graphics g, Color lineColor, int x1, int y1, int x2 , int y2){
+    Graphics2D g2d = (Graphics2D)g;
+    g2d.setPaint(lineColor);
+    g2d.setStroke(new BasicStroke(2));
+    g2d.drawLine(x1,y1,x2,y2);
+  }
+
   //Unused MouseListener methods; required overrides for MouseListener implementation
   @Override
   public void mousePressed(MouseEvent e) {}
@@ -368,13 +388,4 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   @Override
   public void mouseExited(MouseEvent e) {}
-
-  private class layeredLineCanvas extends JLayeredPane {
-    public void paint(Graphics g, int x1, int x2, int y1, int y2){
-      Graphics2D g2d = (Graphics2D)g;
-      g2d.setPaint(Color.BLACK);
-      g2d.setStroke(new BasicStroke(5));
-      g2d.drawLine(0,0,100,100);
-    }
-  }
 }
