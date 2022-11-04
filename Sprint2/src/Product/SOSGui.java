@@ -1,23 +1,26 @@
 package Product;
 
 import Product.SOSGame.Status;
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -79,9 +82,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     if(e.getSource() == startButton) {
       //Pass gameModeSelection, boardSize for start game; set playerTurn to "Player 1"
       startGame();
-      Bottom.remove(startButton);
-      Bottom.add(resetButton);
+      Top.remove(startButton);
+      Top.add(resetButton);
+      Top.updateUI();
       Bottom.add(currentTurnLabel);
+      Bottom.updateUI();
       resetBoard(currentGame.getBoardSize());
     }
     else if(e.getSource() == simpleGameModeOption){
@@ -113,7 +118,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
-          if(Objects.equals(playerTurn, "Player 1")) {
+          if(currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
             currentGame.makeMove(i, j, p1MoveChar);
             if(currentGame.getBeginRowIndex(i,j) > -1){
               if(currentGame.getCellOwnerID(i,j) == 0){
@@ -151,12 +156,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
             System.exit(0);
           }
           else if(gameOverOptionSelection == 1){
-            //resetBoard(3);
-            //startGame();
+            Top.remove(resetButton);
+            Top.add(startButton);
+            Top.remove(currentTurnLabel);
+            Top.updateUI();
             createPreviewBoard();
-          }
-          else{
-            System.out.println(gameOverOptionSelection);
           }
           playerTurn = currentGame.getPlayerTurn();
           currentTurnLabel.setText("Turn: " + playerTurn);
@@ -167,6 +171,10 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private void panelsComponentsSetup(){
     //Top panel components
+    startButton = new JButton("Start");
+    startButton.addActionListener(this);
+    resetButton = new JButton("New Game");
+    resetButton.addActionListener(this);
     gameModeLabel = new JLabel("Game Mode:");
     simpleGameModeOption = new JRadioButton("Simple", true);
     simpleGameModeOption.addActionListener(this);
@@ -200,12 +208,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     moveGroupPlayer2.add(player2MoveO);
     
     //Bottom panel components
-    startButton = new JButton("Start");
-    startButton.addActionListener(this);
-    resetButton = new JButton("New Game");
-    resetButton.addActionListener(this);
-
+    Font turnLabelFont = new Font(null, Font.PLAIN, 25);
     currentTurnLabel = new JLabel();
+    currentTurnLabel.setFont(turnLabelFont);
   }
 
   private void panelsSetup(){
@@ -219,6 +224,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Top.add(generalGameModeOption);
     Top.add(boardSizeLabel);
     Top.add(boardSizeInput);
+    Top.add(startButton);
 
     Left = new JPanel(new GridLayout(3,1));
     Left.setPreferredSize(new Dimension(100,700));
@@ -234,7 +240,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     Bottom = new JPanel();
     Bottom.setPreferredSize(new Dimension(800,100));
-    Bottom.add(startButton);
   }
 
   private void frameSetup(){
@@ -255,10 +260,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     panelsComponentsSetup();
     panelsSetup();
     frameSetup();
-    //resetBoard(boardSize);
   }
 
-  private void destroyBoard(int boardSize){
+  private void destroyBoard(){
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         Board.remove(boardCellsList.get(i).get(j));
@@ -275,7 +279,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private void resetBoard(int boardSize){
     //Initialize cell list
-    destroyBoard(boardSize);
+    destroyBoard();
     Board.setLayout(new GridLayout(boardSize,boardSize, 0,0));
     cellFont = new Font(Font.SERIF, Font.BOLD, 25);
 
@@ -348,4 +352,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   @Override
   public void mouseExited(MouseEvent e) {}
+
+  private class layeredLineCanvas extends JLayeredPane {
+    public void paint(Graphics g, int x1, int x2, int y1, int y2){
+      Graphics2D g2d = (Graphics2D)g;
+      g2d.setPaint(Color.BLACK);
+      g2d.setStroke(new BasicStroke(5));
+      g2d.drawLine(0,0,100,100);
+    }
+  }
 }
