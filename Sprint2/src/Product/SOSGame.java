@@ -1,7 +1,6 @@
 package Product;
 
 import static java.lang.Math.floor;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -172,28 +171,33 @@ public class SOSGame{
 
   private boolean isSOSFormed(int row, int col, String moveContent){
     //Check if an SOS was formed by the current move
-    int minRowIndex = 0;
-    int maxRowIndex = getBoardSize() - 1;
-    int minColIndex = 0;
-    int maxColIndex = getBoardSize() - 1;
+    int minRowIndex;
+    int maxRowIndex;
+    int minColIndex;
+    int maxColIndex;
     boolean isFormed = false;
 
     switch (moveContent) {
       case "S" -> {//Check row+/-2 cells subarray on all sides of the cell
+        minRowIndex = row - 2;
+        maxRowIndex = row + 2;
+        minColIndex = col - 2;
+        maxColIndex = col + 2;
+
         //Set subarray min/max row indices
-        if ((row - 2) > 0) {
-          minRowIndex = row - 2;
+        if ((row - 2) < 0) {
+          minRowIndex = row;
         }
-        if ((row + 2) < getBoardSize() - 1) {
-          maxRowIndex = row + 2;
+        if ((row + 2) > getBoardSize() - 1) {
+          maxRowIndex = row;
         }
 
         //set subarray min/max column indices
-        if ((col - 2) > 0) {
-          minColIndex = col - 2;
+        if ((col - 2) < 0) {
+          minColIndex = col;
         }
-        if ((col + 2) < getBoardSize() - 1) {
-          maxColIndex = col + 2;
+        if ((col + 2) > getBoardSize() - 1) {
+          maxColIndex = col;
         }
 
         //Starting and ending indices are adjusted in the loops, so it doesn't iterate over cells unnecessarily
@@ -220,6 +224,11 @@ public class SOSGame{
         }
       }
       case "O" -> {//Check row+/-1 cells subarray around the cell
+        minRowIndex = row - 1;
+        maxRowIndex = row + 1;
+        minColIndex = col - 1;
+        maxColIndex = col + 1;
+
         //If an "O" is placed in a corner, it is impossible to have formed an SOS
         if (((row == 0) && (col == 0)) || (row == 0) && (col == getBoardSize() - 1) || (
             (row == getBoardSize() - 1) && (col == 0)) || ((row == getBoardSize() - 1) && (col
@@ -228,21 +237,21 @@ public class SOSGame{
         }
 
         //Set valid indices for sub rows
-        if ((row - 1) > minRowIndex) {
-          minRowIndex = row - 1;
-        } else if ((row + 1) < maxRowIndex) {
-          maxRowIndex = row + 1;
+        if ((row - 1) < 0) {
+          minRowIndex = row;
+        } else if ((row + 1) > getBoardSize() - 1) {
+          maxRowIndex = row;
         }
 
         //Set valid indices for sub columns
-        if ((col - 1) > minColIndex) {
-          minRowIndex = col - 1;
-        } else if ((col + 1) < maxColIndex) {
+        if ((col - 1) < 0) {
+          minRowIndex = col;
+        } else if ((col + 1) > getBoardSize() - 1) {
           maxColIndex = col;
         }
-        for (int i = minRowIndex; i <= maxRowIndex; i++) {
-          for (int j = minColIndex; j <= maxColIndex;
-              j++) {//Check surrounding cells for "S" content
+
+        for (int i = minRowIndex; i <= row; i++) {
+          for (int j = minColIndex; j <= maxColIndex; j++) {//Check surrounding cells for "S" content
             if (Objects.equals(gameBoard.get(i).get(j).getContent(), "S")) {
               int oppCellRow = 0;
               int oppCellCol = 0;
@@ -294,6 +303,7 @@ public class SOSGame{
                 isFormed = true;
               }
             }
+            maxColIndex -= 2;
           }
         }
       }
