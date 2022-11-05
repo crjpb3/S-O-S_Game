@@ -1,5 +1,7 @@
 package Product;
 
+import static java.lang.Math.abs;
+
 import Product.SOSGame.Status;
 import Product.SOSGame.Turn;
 import java.awt.BasicStroke;
@@ -130,6 +132,35 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
               boardCellsList.get(i).get(j).setText(p2MoveChar);
             }
           }
+
+          //Code for drawing lines through completed SOS
+          int beginRow = currentGame.getBeginRowIndex(i,j);
+          int beginCol = currentGame.getBeginColIndex(i,j);
+          int endRow = currentGame.getEndRowIndex(i,j);
+          int endCol = currentGame.getEndColIndex(i,j);
+
+          if(currentGame.getBeginRowIndex(i,j) > -1){
+            if(currentGame.getCellOwnerID(i,j) == 0){
+              //blue line for player 1
+              paint(
+                  Board.getGraphics(), Color.BLUE,
+                  boardCellsList.get(beginRow).get(beginCol).getX() + boardCellsList.get(beginRow).get(beginCol).getWidth()/2,
+                  abs(boardCellsList.get(beginRow).get(beginCol).getY() + boardCellsList.get(beginRow).get(beginCol).getHeight()/2),
+                  boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth()/2,
+                  abs(boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight()/2)
+              );
+            }
+            else if(currentGame.getCellOwnerID(i,j) == 1){
+              //red line for player 2
+              paint(
+                  Board.getGraphics(), Color.RED,
+                  boardCellsList.get(beginRow).get(beginCol).getX() + boardCellsList.get(beginRow).get(beginCol).getWidth()/2,
+                  abs(boardCellsList.get(beginRow).get(beginCol).getY() + boardCellsList.get(beginRow).get(beginCol).getHeight()/2),
+                  boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth()/2,
+                  abs(boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight()/2)
+              );
+            }
+          }
           //Check game status for game over and display appropriate notification
           String[] gameOverOptionsList = {"Exit Game","New Game"};
           int gameOverOptionSelection = 2;
@@ -161,26 +192,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           }
           else{
             currentTurnLabel.setText("<html>Turn: <font color=red>Player 2</font></html>");
-          }
-          //Code for drawing lines through completed SOS
-          int beginRow = currentGame.getBeginRowIndex(i,j);
-          int beginCol = currentGame.getBeginColIndex(i,j);
-          int endRow = currentGame.getEndRowIndex(i,j);
-          int endCol = currentGame.getEndColIndex(i,j);
-          if(currentGame.getBeginRowIndex(i,j) > -1){
-            if(currentGame.getCellOwnerID(i,j) == 0){
-              //blue line for player 1
-              paint(
-                  Board.getGraphics(), Color.BLUE,
-                  boardCellsList.get(beginRow).get(beginCol).getX(),
-                  boardCellsList.get(beginRow).get(beginCol).getY(),
-                  boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth(),
-                  boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight()
-              );
-            }
-            else if(currentGame.getCellOwnerID(i,j) == 1){
-              //red line for player 2
-            }
           }
         }
       }
