@@ -1,5 +1,7 @@
 package Product;
 
+import java.util.Objects;
+
 public class SOSCell{
   private String currentContent;
   private int cellOwnerID = -1;
@@ -13,7 +15,7 @@ public class SOSCell{
   }
 
   public boolean isEmpty(){
-    return currentContent == "";
+    return Objects.equals(currentContent, "");
   }
 
   public void setContent(String content){
