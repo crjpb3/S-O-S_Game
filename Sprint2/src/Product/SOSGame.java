@@ -214,8 +214,8 @@ public class SOSGame{
                   extendedColIndex >= minColIndex) && (extendedColIndex <= maxColIndex)
                   && Objects.equals(
                   gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent(), "S")) {
-                gameBoard.get(row).get(col).setBeginIndexOfSOS(extendedRowIndex, extendedColIndex);
-                gameBoard.get(row).get(col).setEndIndexOfSOS(row, col);
+                gameBoard.get(row).get(col).setBeginIndexOfSOS(row, col);
+                gameBoard.get(row).get(col).setEndIndexOfSOS(extendedRowIndex, extendedColIndex);
                 updateGeneralGameScore(getPlayerTurn());
                 System.out.println("SOS COMPLETED");
                 isFormed = true;
