@@ -217,7 +217,6 @@ public class SOSGame{
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(row, col);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(extendedRowIndex, extendedColIndex);
                 updateGeneralGameScore(getPlayerTurn());
-                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
@@ -299,7 +298,6 @@ public class SOSGame{
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
                 updateGeneralGameScore(getPlayerTurn());
-                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
