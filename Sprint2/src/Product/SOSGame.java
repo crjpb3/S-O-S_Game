@@ -217,6 +217,7 @@ public class SOSGame{
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(row, col);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(extendedRowIndex, extendedColIndex);
                 updateGeneralGameScore(getPlayerTurn());
+                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
@@ -226,6 +227,7 @@ public class SOSGame{
       case "O" -> {//Check row+/-1 cells subarray around the cell
         minRowIndex = row - 1;
         minColIndex = col - 1;
+        maxRowIndex = row + 1;
         maxColIndex = col + 1;
 
 
@@ -294,15 +296,23 @@ public class SOSGame{
                   break;
               }
 
+              System.out.println("Row: " + row);
+              System.out.println("Col: " + col);
+              System.out.println("MinRow: " + minRowIndex);
+              System.out.println("MinCol: " + minColIndex);
+              System.out.println("MaxRow: " + maxRowIndex);
+              System.out.println("MaxCol: " + maxColIndex);
+
               if (Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")) {
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
                 updateGeneralGameScore(getPlayerTurn());
+                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
-            maxColIndex -= 2;
           }
+          maxColIndex -= 2;
         }
       }
     }
