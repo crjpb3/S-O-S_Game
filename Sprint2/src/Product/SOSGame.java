@@ -296,13 +296,6 @@ public class SOSGame{
                   break;
               }
 
-              System.out.println("Row: " + row);
-              System.out.println("Col: " + col);
-              System.out.println("MinRow: " + minRowIndex);
-              System.out.println("MinCol: " + minColIndex);
-              System.out.println("MaxRow: " + maxRowIndex);
-              System.out.println("MaxCol: " + maxColIndex);
-
               if (Objects.equals(gameBoard.get(oppCellRow).get(oppCellCol).getContent(), "S")) {
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
