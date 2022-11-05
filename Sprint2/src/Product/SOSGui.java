@@ -117,13 +117,18 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
+          int moveIntReturn;
           if(currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
-            currentGame.makeMove(i, j, p1MoveChar);
-            boardCellsList.get(i).get(j).setText(p1MoveChar);
+            moveIntReturn = currentGame.makeMove(i, j, p1MoveChar);
+            if(moveIntReturn == 0){
+              boardCellsList.get(i).get(j).setText(p1MoveChar);
+            }
           }
           else{
-            currentGame.makeMove(i, j, p2MoveChar);
-            boardCellsList.get(i).get(j).setText(p2MoveChar);
+            moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
+            if(moveIntReturn == 0){
+              boardCellsList.get(i).get(j).setText(p2MoveChar);
+            }
           }
           //Check game status for game over and display appropriate notification
           String[] gameOverOptionsList = {"Exit Game","New Game"};
@@ -165,12 +170,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           if(currentGame.getBeginRowIndex(i,j) > -1){
             if(currentGame.getCellOwnerID(i,j) == 0){
               //blue line for player 1
-              paintLine(Board.getGraphics(), Color.BLACK, boardCellsList.get(beginRow).get(beginCol).getX(), boardCellsList.get(beginRow).get(beginCol).getY(), boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth(), boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight());
-              System.out.println("Line should paint here");
-              System.out.println("Begin: " + beginRow + "," + beginCol);
-              System.out.println("End: " + endRow + "," + endCol);
-              System.out.println("Begin Cell x,y: " + boardCellsList.get(beginRow).get(beginCol).getX() + "," + boardCellsList.get(beginRow).get(beginCol).getY());
-              System.out.println("End Cell x,y: " + boardCellsList.get(beginRow).get(beginCol).getX() + "," + boardCellsList.get(endRow).get(endCol).getY());
+              paint(
+                  Board.getGraphics(), Color.BLUE,
+                  boardCellsList.get(beginRow).get(beginCol).getX(),
+                  boardCellsList.get(beginRow).get(beginCol).getY(),
+                  boardCellsList.get(endRow).get(endCol).getX() + boardCellsList.get(endRow).get(endCol).getWidth(),
+                  boardCellsList.get(endRow).get(endCol).getY() + boardCellsList.get(endRow).get(endCol).getHeight()
+              );
             }
             else if(currentGame.getCellOwnerID(i,j) == 1){
               //red line for player 2
@@ -348,7 +354,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardSizeInput.setText(Integer.toString(currentGame.getBoardSize()));
   }
 
-  private void createPreviewBoard(){
+  private void createPreviewBoard(){//May remove this in favor of a different start setup
     resetBoard(3);
 
     boardCellsList.get(0).get(0).setText("S");
@@ -362,17 +368,10 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardCellsList.get(2).get(0).setText("S");
     boardCellsList.get(2).get(0).setForeground(Color.BLUE);
   }
-
-  private void paintLine(Graphics g){
-    Graphics2D g2d = (Graphics2D)g;
-    g2d.setPaint(Color.BLACK);
-    g2d.setStroke(new BasicStroke(2));
-    g2d.drawLine(200,200,300,300);
-  }
-  private void paintLine(Graphics g, Color lineColor, int x1, int y1, int x2 , int y2){
+  private void paint(Graphics g, Color lineColor, int x1, int y1, int x2 , int y2){
     Graphics2D g2d = (Graphics2D)g;
     g2d.setPaint(lineColor);
-    g2d.setStroke(new BasicStroke(2));
+    g2d.setStroke(new BasicStroke(5));
     g2d.drawLine(x1,y1,x2,y2);
   }
 
