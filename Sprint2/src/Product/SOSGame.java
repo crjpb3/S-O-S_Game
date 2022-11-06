@@ -121,10 +121,11 @@ public class SOSGame{
       }
 
       if(isGameOver(row,col,moveContent,gameMode)){
-        //return 1 to let the GUI know the game is over, so it can display game over notification
+        //return 1 lets the GUI know the game is over, so it can display game over notification
         return 1;
       }
       else{
+        //Game is not over; change turn and continue
         changePlayerTurn();
         return 0;
       }
@@ -217,7 +218,6 @@ public class SOSGame{
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(row, col);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(extendedRowIndex, extendedColIndex);
                 updateGeneralGameScore(getPlayerTurn());
-                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
@@ -300,7 +300,6 @@ public class SOSGame{
                 gameBoard.get(row).get(col).setBeginIndexOfSOS(i, j);
                 gameBoard.get(row).get(col).setEndIndexOfSOS(oppCellRow, oppCellCol);
                 updateGeneralGameScore(getPlayerTurn());
-                System.out.println("SOS COMPLETED");
                 isFormed = true;
               }
             }
