@@ -9,6 +9,9 @@ public class SOSGame{
   Status gameStatus;
   public enum Mode {SIMPLE, GENERAL}
   Mode gameMode;
+  public enum PlayerType {HUMAN, COMPUTER}
+  private PlayerType player1Type = PlayerType.HUMAN;
+  private PlayerType player2Type = PlayerType.HUMAN;
   private int p1GeneralGameScore;
   private int p2GeneralGameScore;
   public enum Turn {PL1, PL2}
@@ -16,11 +19,11 @@ public class SOSGame{
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   private int unoccupiedCellsCount;
   private int boardSize;
-  public <T> SOSGame(T size, int mode){
-    resetGame(size, mode);
+  public <T> SOSGame(T size, int mode, PlayerType p1Type, PlayerType p2Type){
+    resetGame(size, mode, p1Type, p2Type);
   }
 
-  public <T> void resetGame(T size, int mode){
+  public <T> void resetGame(T size, int mode, PlayerType p1Type, PlayerType p2Type){
     p1GeneralGameScore = 0;
     p2GeneralGameScore = 0;
 
@@ -33,6 +36,7 @@ public class SOSGame{
     }
 
     setPlayerTurn(Turn.PL1);
+    setPlayerTypes(p1Type,p2Type);
     setBoardSize(size);
     setUnoccupiedCellsCount(getBoardSize());
     setGameMode(mode);
@@ -104,8 +108,24 @@ public class SOSGame{
     return "General";
   }
 
+  private void setPlayerTypes(PlayerType p1Type, PlayerType p2Type){
+    player1Type = p1Type;
+    player2Type = p2Type;
+  }
+
+  public PlayerType getPlayerType(Turn playerTurn){
+    return switch (playerTurn) {
+      case PL1 -> player1Type;
+      case PL2 -> player2Type;
+    };
+  }
+
   public boolean isCellEmpty(int row, int col){
     return gameBoard.get(row).get(col).isEmpty();
+  }
+
+  public String getCellContent(int row, int col){
+    return gameBoard.get(row).get(col).getContent();
   }
 
   public int makeMove(int row, int col, String moveContent){
@@ -131,6 +151,24 @@ public class SOSGame{
       }
     }
     return -1;
+  }
+
+  public int computerChooseX(){
+    return (int)(Math.random() * boardSize);
+  }
+
+  public int computerChooseY(){
+    return (int)(Math.random() * boardSize);
+  }
+
+  public String computerChooseToken(){
+    int randInt = (int)(Math.random() * 2);
+
+    if(randInt == 0){
+      return "S";
+    }
+
+    return"O";
   }
 
   private boolean isMoveValid(int row, int col){
