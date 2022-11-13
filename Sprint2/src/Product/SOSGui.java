@@ -130,7 +130,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   @Override
   public void mouseClicked(MouseEvent e) {
     //Making a move event
-    if(currentGame.getPlayerType(playerTurn) == PlayerType.COMPUTER){
+    if((e.getSource() == currentTurnLabel) && (currentGame.getPlayerType(playerTurn) == PlayerType.COMPUTER)){
       int moveX = currentGame.computerChooseX();
       int moveY = currentGame.computerChooseY();
       String moveToken = currentGame.computerChooseToken();
@@ -138,12 +138,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
       if(moveInt > -1){
         boardCellsList.get(moveX).get(moveY).setText(moveToken);
+        drawSOSLine(moveX,moveY);
+        handleGameOVer();
       }
-      drawSOSLine(moveX,moveY);
-      handleGameOVer();
       return;
 
     }
+
     for(int i = 0; i < boardCellsList.size(); i++){
       for(int j = 0; j < boardCellsList.get(i).size(); j++){
         if(e.getSource() == boardCellsList.get(i).get(j)){
@@ -158,10 +159,10 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
             moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
             if(moveIntReturn > -1){
               boardCellsList.get(i).get(j).setText(p2MoveChar);
+              drawSOSLine(i,j);
+              handleGameOVer();
             }
           }
-          drawSOSLine(i,j);
-          handleGameOVer();
         }
       }
     }
@@ -239,6 +240,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Font turnLabelFont = new Font(null, Font.PLAIN, 25);
     currentTurnLabel = new JLabel("<html>Turn: <font color=blue>Player 1</font></html>");
     currentTurnLabel.setFont(turnLabelFont);
+    currentTurnLabel.addMouseListener(this);
   }
 
   private void panelsSetup(){
@@ -365,6 +367,10 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Bottom.updateUI();
 
     resetBoard(currentGame.getBoardSize());
+
+    if((currentGame.getPlayerType(Turn.PL1) == PlayerType.COMPUTER) || (currentGame.getPlayerType(Turn.PL2) == PlayerType.COMPUTER)){
+      JOptionPane.showMessageDialog(Board,"Click the player turn label to have the computer player(s) make their move!", "Computer Player Information", JOptionPane.INFORMATION_MESSAGE);
+    }
   }
 
   private void createPreviewBoard(){//May remove this in favor of a different start setup
