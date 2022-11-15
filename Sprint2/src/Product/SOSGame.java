@@ -172,7 +172,7 @@ public class SOSGame{
   }
 
   public int[] computerMove(){
-    int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return}
+    int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return int}
     int xCoord = computerChooseX();
     int yCoord = computerChooseY();
     String moveToken = computerChooseToken();
@@ -180,6 +180,30 @@ public class SOSGame{
     while(!gameBoard.get(xCoord).get(yCoord).isEmpty()){
       xCoord = computerChooseX();
       yCoord = computerChooseY();
+    }
+
+    for(int i = xCoord-1; i < xCoord+2; i++){
+      for(int j = yCoord-1; j < yCoord+2; j++){
+
+        if((i < 0) || (j < 0) || (i >= getBoardSize()) || (j >= getBoardSize())){
+          continue;
+        }
+
+        //Try to not place the same tokens next to one another
+        if(!gameBoard.get(i).get(j).isEmpty() && Objects.equals(gameBoard.get(i).get(j).getContent(), moveToken)){
+          if(Objects.equals(moveToken, "S")){
+            moveToken = "O";
+          }
+          else{
+            moveToken = "S";
+          }
+          moveInformation[0] = xCoord;
+          moveInformation[1] = yCoord;
+          moveInformation[2] = makeMove(xCoord,yCoord,moveToken);
+
+          return moveInformation;
+        }
+      }
     }
 
     moveInformation[0] = xCoord;
