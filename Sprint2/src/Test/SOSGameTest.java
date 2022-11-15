@@ -237,11 +237,11 @@ class SOSGameTest {
   @Test
   void testComputerMove(){
     SOSGame Game = new SOSGame(3,0,SOSGame.PlayerType.HUMAN,SOSGame.PlayerType.HUMAN);
-    int x = Game.computerChooseX();
-    int y = Game.computerChooseY();
-    String token = Game.computerChooseToken();
+    int[] moveInfo = Game.computerMove();
+    int x = moveInfo[0];
+    int y = moveInfo[1];
+    String token = Game.getCellContent(x,y);
 
-    Game.makeMove(x,y,token);
     assertFalse(Game.isCellEmpty(x,y));
     assertEquals(token, Game.getCellContent(x,y));
   }

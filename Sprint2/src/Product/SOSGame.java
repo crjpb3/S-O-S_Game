@@ -153,15 +153,15 @@ public class SOSGame{
     return -1;
   }
 
-  public int computerChooseX(){
+  private int computerChooseX(){
     return (int)(Math.random() * boardSize);
   }
 
-  public int computerChooseY(){
+  private int computerChooseY(){
     return (int)(Math.random() * boardSize);
   }
 
-  public String computerChooseToken(){
+  private String computerChooseToken(){
     int randInt = (int)(Math.random() * 2);
 
     if(randInt == 0){
@@ -169,6 +169,24 @@ public class SOSGame{
     }
 
     return"O";
+  }
+
+  public int[] computerMove(){
+    int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return}
+    int xCoord = computerChooseX();
+    int yCoord = computerChooseY();
+    String moveToken = computerChooseToken();
+
+    while(!gameBoard.get(xCoord).get(yCoord).isEmpty()){
+      xCoord = computerChooseX();
+      yCoord = computerChooseY();
+    }
+
+    moveInformation[0] = xCoord;
+    moveInformation[1] = yCoord;
+    moveInformation[2] = makeMove(xCoord,yCoord,moveToken);
+
+    return moveInformation;
   }
 
   private boolean isMoveValid(int row, int col){

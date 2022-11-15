@@ -131,10 +131,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   public void mouseClicked(MouseEvent e) {
     //Making a move event
     if((e.getSource() == currentTurnLabel) && (currentGame.getPlayerType(playerTurn) == PlayerType.COMPUTER)){
-      int moveX = currentGame.computerChooseX();
-      int moveY = currentGame.computerChooseY();
-      String moveToken = currentGame.computerChooseToken();
-      int moveInt = currentGame.makeMove(moveX,moveY,moveToken);
+      int[] moveInformation = currentGame.computerMove();
+      int moveX = moveInformation[0];
+      int moveY = moveInformation[1];
+      String moveToken = currentGame.getCellContent(moveX,moveY);
+      int moveInt = moveInformation[2];
 
       if(moveInt > -1){
         boardCellsList.get(moveX).get(moveY).setText(moveToken);
