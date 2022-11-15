@@ -153,14 +153,6 @@ public class SOSGame{
     return -1;
   }
 
-  private int computerChooseX(){
-    return (int)(Math.random() * boardSize);
-  }
-
-  private int computerChooseY(){
-    return (int)(Math.random() * boardSize);
-  }
-
   private String computerChooseToken(){
     int randInt = (int)(Math.random() * 2);
 
@@ -173,13 +165,13 @@ public class SOSGame{
 
   public int[] computerMove(){
     int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return int}
-    int xCoord = computerChooseX();
-    int yCoord = computerChooseY();
+    int xCoord = (int)(Math.random() * boardSize);
+    int yCoord = (int)(Math.random() * boardSize);
     String moveToken = computerChooseToken();
 
     while(!gameBoard.get(xCoord).get(yCoord).isEmpty()){
-      xCoord = computerChooseX();
-      yCoord = computerChooseY();
+      xCoord = (int)(Math.random() * boardSize);
+      yCoord = (int)(Math.random() * boardSize);
     }
 
     for(int i = xCoord-1; i < xCoord+2; i++){
