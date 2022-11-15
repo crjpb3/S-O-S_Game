@@ -10,12 +10,10 @@ public class SOSGame{
   public enum Mode {SIMPLE, GENERAL}
   Mode gameMode;
   public enum PlayerType {HUMAN, COMPUTER}
-  private PlayerType player1Type = PlayerType.HUMAN;
-  private PlayerType player2Type = PlayerType.HUMAN;
-  private int p1GeneralGameScore;
-  private int p2GeneralGameScore;
   public enum Turn {PL1, PL2}
   Turn currentTurn = Turn.PL1;
+  Player Player1;
+  Player Player2;
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   private int unoccupiedCellsCount;
   private int boardSize;
@@ -24,8 +22,10 @@ public class SOSGame{
   }
 
   public <T> void resetGame(T size, int mode, PlayerType p1Type, PlayerType p2Type){
-    p1GeneralGameScore = 0;
-    p2GeneralGameScore = 0;
+    Player1 = new Player(p1Type);
+    Player2 = new Player(p2Type);
+    Player1.resetScore();
+    Player2.resetScore();
 
     //Destroy existing gameBoard
     for(int i = 0; i < gameBoard.size(); i++){
@@ -36,7 +36,6 @@ public class SOSGame{
     }
 
     setPlayerTurn(Turn.PL1);
-    setPlayerTypes(p1Type,p2Type);
     setBoardSize(size);
     setUnoccupiedCellsCount(getBoardSize());
     setGameMode(mode);
@@ -108,15 +107,10 @@ public class SOSGame{
     return "General";
   }
 
-  private void setPlayerTypes(PlayerType p1Type, PlayerType p2Type){
-    player1Type = p1Type;
-    player2Type = p2Type;
-  }
-
   public PlayerType getPlayerType(Turn playerTurn){
     return switch (playerTurn) {
-      case PL1 -> player1Type;
-      case PL2 -> player2Type;
+      case PL1 -> Player1.getPlayerType();
+      case PL2 -> Player2.getPlayerType();
     };
   }
 
@@ -130,13 +124,16 @@ public class SOSGame{
 
   public int makeMove(int row, int col, String moveContent){
     if(isMoveValid(row, col)){
+      int[] playerMove = {row,col};
       gameBoard.get(row).get(col).setContent(moveContent);
       updateUnoccupiedCellsCount();
 
       if(getPlayerTurn() == Turn.PL1){
+        Player1.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(0);
       }
       else{
+        Player2.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(1);
       }
 
@@ -230,19 +227,20 @@ public class SOSGame{
 
   private void updateGeneralGameScore(Turn playerTurn){
     switch(playerTurn){
-      case PL1 -> p1GeneralGameScore++;
-      case PL2 -> p2GeneralGameScore++;
+      case PL1 -> Player1.updateScore();
+      case PL2 -> Player2.updateScore();
     }
   }
 
   public int getGeneralGameScore(Turn playerTurn){
     return switch (playerTurn) {
-      case PL1 -> p1GeneralGameScore;
-      case PL2 -> p2GeneralGameScore;
+      case PL1 -> Player1.getScore();
+      case PL2 -> Player2.getScore();
     };
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
+//******SOS being counted twice when involved in multiple SOS creations******
     //Check if an SOS was formed by the current move
     int minRowIndex;
     int maxRowIndex;
@@ -404,14 +402,17 @@ public class SOSGame{
     if(getUnoccupiedCellsCount() == 0){
       if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
         setGameStatus(Status.P1_WIN);
+        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
       else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
         setGameStatus(Status.P2_WIN);
+        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
       else{
         setGameStatus(Status.DRAW);
+        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
     }
