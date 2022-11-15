@@ -129,7 +129,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   }
   @Override
   public void mouseClicked(MouseEvent e) {
-    //Making a move event
+    //Making a move
     if((e.getSource() == currentTurnLabel) && (currentGame.getPlayerType(playerTurn) == PlayerType.COMPUTER)){
       int[] moveInformation = currentGame.computerMove();
       int moveX = moveInformation[0];
@@ -137,13 +137,17 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       String moveToken = currentGame.getCellContent(moveX,moveY);
       int moveInt = moveInformation[2];
 
-      if(moveInt > -1){
+      if(moveInt == 0){
+        boardCellsList.get(moveX).get(moveY).setText(moveToken);
+        drawSOSLine(moveX,moveY);
+      }
+      else if(moveInt == 1){
         boardCellsList.get(moveX).get(moveY).setText(moveToken);
         drawSOSLine(moveX,moveY);
         handleGameOVer();
       }
+      changePlayerTurn();
       return;
-
     }
 
     for(int i = 0; i < boardCellsList.size(); i++){
@@ -152,13 +156,23 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           int moveIntReturn;
           if(currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
             moveIntReturn = currentGame.makeMove(i, j, p1MoveChar);
-            if(moveIntReturn > -1){
+            if(moveIntReturn == 0){
               boardCellsList.get(i).get(j).setText(p1MoveChar);
+              drawSOSLine(i,j);
+            }
+            else if(moveIntReturn == 1){
+              boardCellsList.get(i).get(j).setText(p1MoveChar);
+              drawSOSLine(i,j);
+              handleGameOVer();
             }
           }
           else{
             moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
-            if(moveIntReturn > -1){
+            if(moveIntReturn == 0){
+              boardCellsList.get(i).get(j).setText(p2MoveChar);
+              drawSOSLine(i,j);
+            }
+            else if(moveIntReturn == 1){
               boardCellsList.get(i).get(j).setText(p2MoveChar);
               drawSOSLine(i,j);
               handleGameOVer();
@@ -167,6 +181,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
         }
       }
     }
+    changePlayerTurn();
   }
 
   private void panelsComponentsSetup(){
@@ -388,6 +403,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardCellsList.get(2).get(0).setText("S");
     boardCellsList.get(2).get(0).setForeground(Color.BLUE);
   }
+
   private void paint(Graphics g, Color lineColor, int x1, int y1, int x2 , int y2){
     Graphics2D g2d = (Graphics2D)g;
     g2d.setPaint(lineColor);
@@ -451,6 +467,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       Bottom.updateUI();
       createPreviewBoard();
     }
+  }
+
+  private void changePlayerTurn(){
     playerTurn = currentGame.getPlayerTurn();
     if(playerTurn == Turn.PL1){
       currentTurnLabel.setText("<html>Turn: <font color=blue>Player 1</font></html>");
