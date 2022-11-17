@@ -8,7 +8,7 @@ public class Player {
   private int playerScore = 0;
 
   public Player(SOSGame.PlayerType type){
-    setPlayerType(type);
+    this.PlayerType = type;
   }
 
   public void resetScore(){
@@ -21,10 +21,6 @@ public class Player {
 
   public int getScore(){
     return this.playerScore;
-  }
-
-  public void setPlayerType(SOSGame.PlayerType type){
-    this.PlayerType = type;
   }
 
   public SOSGame.PlayerType getPlayerType(){
