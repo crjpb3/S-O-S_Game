@@ -15,48 +15,48 @@ public class SOSCell{
   }
 
   public boolean isEmpty(){
-    return Objects.equals(currentContent, "");
+    return Objects.equals(this.currentContent, "");
   }
 
   public void setContent(String content){
-    currentContent = content;
+    this.currentContent = content;
   }
   
   public String getContent(){
-    return currentContent;
+    return this.currentContent;
   }
 
   public void setCellOwner(int playerID){
-    cellOwnerID = playerID;
+    this.cellOwnerID = playerID;
   }
 
   public int getCellOwner(){
-    return cellOwnerID;
+    return this.cellOwnerID;
   }
 
   public void setBeginIndexOfSOS(int row, int col){
-    beginRowIndex = row;
-    beginColIndex = col;
+    this.beginRowIndex = row;
+    this.beginColIndex = col;
   }
 
   public void setEndIndexOfSOS(int row, int col){
-    endRowIndex = row;
-    endColIndex = col;
+    this.endRowIndex = row;
+    this.endColIndex = col;
   }
 
   public int getBeginRowIndex(){
-    return beginRowIndex;
+    return this.beginRowIndex;
   }
 
   public int getEndRowIndex(){
-    return endRowIndex;
+    return this.endRowIndex;
   }
 
   public int getBeginColIndex(){
-    return beginColIndex;
+    return this.beginColIndex;
   }
 
   public int getEndColIndex(){
-    return endColIndex;
+    return this.endColIndex;
   }
 }
