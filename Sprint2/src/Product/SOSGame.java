@@ -240,7 +240,6 @@ public class SOSGame{
   }
 
   private boolean isSOSFormed(int row, int col, String moveContent){
-//******SOS being counted twice when involved in multiple SOS creations******
     //Check if an SOS was formed by the current move
     int minRowIndex;
     int maxRowIndex;
