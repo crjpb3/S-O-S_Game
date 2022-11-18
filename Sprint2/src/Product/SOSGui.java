@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -444,15 +445,25 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private void handleGameOVer(){
     //Check game status for game over and display appropriate notification
     String[] gameOverOptionsList = {"Exit Game","New Game"};
+    String drawMessage = "The game is a draw!";
+    String p1WinMessage = "<html><font color=blue>Player 1</font> wins!</html>";
+    String p2WinMessage = "<html><font color=red>Player 2</font> wins!</html>";
     int gameOverOptionSelection = 2;
+
+    if(Objects.equals(currentGame.getGameMode(), "General")){
+      drawMessage += " Score " + currentGame.Player1.getScore() + ":" + currentGame.Player2.getScore();
+      p1WinMessage = "<html><font color=blue>Player 1</font> wins! Score " + currentGame.Player1.getScore() + ":" + currentGame.Player2.getScore() + "</html>";
+      p2WinMessage = "<html><font color=red>Player 2</font> wins! Score " + currentGame.Player2.getScore() + ":" + currentGame.Player1.getScore() + "</html>";
+    }
+
     if(currentGame.getGameStatus() == Status.DRAW){
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, "The game is a draw!", "DRAW", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      gameOverOptionSelection = JOptionPane.showOptionDialog(this, drawMessage, "DRAW", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     }
     else if(currentGame.getGameStatus() == Status.P1_WIN){
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, "<html><font color=blue>Player 1</font> wins!</html>", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      gameOverOptionSelection = JOptionPane.showOptionDialog(this, p1WinMessage, "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     }
     else if(currentGame.getGameStatus() == Status.P2_WIN){
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, "<html><font color=red>Player 2</font> wins!</html>", "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      gameOverOptionSelection = JOptionPane.showOptionDialog(this, p2WinMessage, "WINNER", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     }
 
     //Check user's game over choice

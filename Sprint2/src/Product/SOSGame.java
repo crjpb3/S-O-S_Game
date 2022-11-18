@@ -162,44 +162,233 @@ public class SOSGame{
 
   public int[] computerMove(){
     int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return int}
-    int xCoord = (int)(Math.random() * boardSize);
-    int yCoord = (int)(Math.random() * boardSize);
-    String moveToken = computerChooseToken();
+    int decisionInt = ((int)(Math.random() * 99) % 3);
+    String compToken = computerChooseToken();
+    int[] opponentPrevMoveCoords = {(int)(Math.random() * getBoardSize()),(int)(Math.random() * getBoardSize())};
+    String opponentPrevToken = "";
 
-    while(!gameBoard.get(xCoord).get(yCoord).isEmpty()){
-      xCoord = (int)(Math.random() * boardSize);
-      yCoord = (int)(Math.random() * boardSize);
-    }
+    switch (getPlayerTurn()) {
+      case PL1 -> {
+        opponentPrevMoveCoords = Player2.getPreviousMove();
 
-    for(int i = xCoord-1; i < xCoord+2; i++){
-      for(int j = yCoord-1; j < yCoord+2; j++){
-
-        if((i < 0) || (j < 0) || (i >= getBoardSize()) || (j >= getBoardSize())){
-          continue;
-        }
-
-        //Try to not place the same tokens next to one another
-        if(!gameBoard.get(i).get(j).isEmpty() && Objects.equals(gameBoard.get(i).get(j).getContent(), moveToken)){
-          if(Objects.equals(moveToken, "S")){
-            moveToken = "O";
+        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+          //Make a random move
+          moveInformation[0] = (int) (Math.random() * getBoardSize());
+          moveInformation[1] = (int) (Math.random() * getBoardSize());
+          while (!gameBoard.get(moveInformation[0]).get(moveInformation[1]).isEmpty()) {
+            moveInformation[0] = (int) (Math.random() * getBoardSize());
+            moveInformation[1] = (int) (Math.random() * getBoardSize());
           }
-          else{
-            moveToken = "S";
-          }
-          moveInformation[0] = xCoord;
-          moveInformation[1] = yCoord;
-          moveInformation[2] = makeMove(xCoord,yCoord,moveToken);
-
+          moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
           return moveInformation;
         }
+
+        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
+      }
+      case PL2 -> {
+        opponentPrevMoveCoords = Player1.getPreviousMove();
+
+        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+          //Make a random move
+          moveInformation[0] = (int) (Math.random() * getBoardSize());
+          moveInformation[1] = (int) (Math.random() * getBoardSize());
+          while (!gameBoard.get(moveInformation[0]).get(moveInformation[1]).isEmpty()) {
+            moveInformation[0] = (int) (Math.random() * getBoardSize());
+            moveInformation[1] = (int) (Math.random() * getBoardSize());
+          }
+          moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
+          return moveInformation;
+        }
+
+        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
       }
     }
 
-    moveInformation[0] = xCoord;
-    moveInformation[1] = yCoord;
-    moveInformation[2] = makeMove(xCoord,yCoord,moveToken);
+    switch (decisionInt) {
+      case 0 -> {
+        moveInformation = compCompleteSOSMove(opponentPrevMoveCoords, opponentPrevToken);
 
+        //Check token information returned from compCompleteSOSMove
+        if (moveInformation[2] == 0) {
+          compToken = "O";
+        }
+        else {
+          compToken = "S";
+        }
+        moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
+      }
+      case 1, 2 -> {
+        //Make a random move
+        moveInformation[0] = (int) (Math.random() * getBoardSize());
+        moveInformation[1] = (int) (Math.random() * getBoardSize());
+        while (!gameBoard.get(moveInformation[0]).get(moveInformation[1]).isEmpty()) {
+          moveInformation[0] = (int) (Math.random() * getBoardSize());
+          moveInformation[1] = (int) (Math.random() * getBoardSize());
+        }
+        moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
+      }
+    }
     return moveInformation;
+  }
+  
+  private int[] compCompleteSOSMove(int[] moveToCheck, String placedToken){
+    int[] prevMove = moveToCheck;
+    int[] moveToMake = {-1,-1,0};//mmoveToMake[2] indicates which token to place, zero for "O" and 1 for "S"
+    String prevToken = placedToken;
+    int minRowIndex;
+    int maxRowIndex;
+    int minColIndex;
+    int maxColIndex;
+
+    switch (prevToken) {
+      case "S" -> {
+        //Set up subarray
+        minRowIndex = prevMove[0] - 1;
+        maxRowIndex = prevMove[0] + 1;
+        minColIndex = prevMove[1] - 1;
+        maxColIndex = prevMove[1] + 1;
+
+        //Adjust bounds if token placed near edge of board
+        if ((prevMove[0] - 2) < 0) {
+          minRowIndex = prevMove[0];
+        }
+        if ((prevMove[0] + 2) > getBoardSize() - 1) {
+          maxRowIndex = prevMove[0];
+        }
+        if ((prevMove[1] - 2) < 0) {
+          minColIndex = prevMove[1];
+        }
+        if ((prevMove[1] + 2) > getBoardSize() - 1) {
+          maxColIndex = prevMove[1];
+        }
+        for (int i = minRowIndex; i <= maxRowIndex; i++) {
+          for (int j = minColIndex; j <= maxColIndex; j++) {
+            if ((i == prevMove[0]) && (j == prevMove[1])) {
+              continue;
+            }
+
+            //Calculate extended cell to check
+            int extendedRowIndex = i + (i - prevMove[0]);
+            int extendedColIndex = j + (j - prevMove[1]);
+
+            switch (gameBoard.get(i).get(j).getContent()) {
+              case "":
+                if (Objects.equals("S",
+                    gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent())) {
+                  moveToMake[0] = i;
+                  moveToMake[1] = j;
+                  moveToMake[2] = 0;
+                }
+                break;
+              case "O":
+                if (Objects.equals("",
+                    gameBoard.get(extendedRowIndex).get(extendedColIndex).getContent())) {
+                  moveToMake[0] = extendedRowIndex;
+                  moveToMake[1] = extendedColIndex;
+                  moveToMake[2] = 1;
+                }
+                break;
+              default:
+                //Make a random move
+                moveToMake[0] = (int) (Math.random() * getBoardSize());
+                moveToMake[1] = (int) (Math.random() * getBoardSize());
+                String token = computerChooseToken();
+                while (!gameBoard.get(moveToMake[0]).get(moveToMake[1]).isEmpty()) {
+                  moveToMake[0] = (int) (Math.random() * getBoardSize());
+                  moveToMake[1] = (int) (Math.random() * getBoardSize());
+                }
+
+                if(token.equals("S")){
+                  moveToMake[2] = 1;
+                }
+                else{
+                  moveToMake[2] = 0;
+                }
+                break;
+            }
+          }
+        }
+      }
+      case "O" -> {
+        //Set up subarray
+        minRowIndex = prevMove[0] - 1;
+        maxRowIndex = prevMove[0] + 1;
+        minColIndex = prevMove[1] - 1;
+        maxColIndex = prevMove[1] + 1;
+        int oppRowIndex = prevMove[0];
+        int oppColIndex = prevMove[1];
+
+        //Adjust bounds if token placed at edge of board
+        if (minRowIndex < 0) {
+          minRowIndex = 0;
+        }
+        if (minColIndex < 0) {
+          minColIndex = 0;
+        }
+        if (maxRowIndex >= getBoardSize()) {
+          maxRowIndex = (getBoardSize() - 1);
+        }
+        if (maxColIndex >= getBoardSize()) {
+          maxColIndex = (getBoardSize() - 1);
+        }
+        
+        for (int i = minRowIndex; i <= maxRowIndex; i++) {
+          for (int j = minColIndex; j <= maxColIndex; j++) {
+            if ((i == prevMove[0]) && (j == prevMove[1])) {
+              continue;
+            }
+
+            //Set opposite indices to check
+            switch (i - prevMove[0]) {
+              case -1 -> oppRowIndex = i + 2;
+              case 0 -> oppRowIndex = i;
+              case 1 -> oppRowIndex = i - 2;
+            }
+            switch (j - prevMove[1]) {
+              case -1 -> oppColIndex = j + 2;
+              case 0 -> oppColIndex = j;
+              case 1 -> oppColIndex = j - 2;
+            }
+
+            if((oppRowIndex < 0) || (oppRowIndex >= getBoardSize()) || (oppColIndex < 0) || (oppColIndex >= getBoardSize())){
+              continue;
+            }
+
+            if (Objects.equals("S", gameBoard.get(i).get(j).getContent()) && Objects.equals("",
+                gameBoard.get(oppRowIndex).get(oppColIndex).getContent())) {
+              moveToMake[0] = oppRowIndex;
+              moveToMake[1] = oppColIndex;
+              moveToMake[2] = 1;
+            }
+            else if (Objects.equals("S", gameBoard.get(oppRowIndex).get(oppColIndex).getContent())
+                && Objects.equals("", gameBoard.get(i).get(j).getContent())) {
+              moveToMake[0] = i;
+              moveToMake[1] = j;
+              moveToMake[2] = 1;
+            }
+            else{
+              //Make a random move
+              moveToMake[0] = (int) (Math.random() * getBoardSize());
+              moveToMake[1] = (int) (Math.random() * getBoardSize());
+              String token = computerChooseToken();
+
+              while (!gameBoard.get(moveToMake[0]).get(moveToMake[1]).isEmpty()) {
+                moveToMake[0] = (int) (Math.random() * getBoardSize());
+                moveToMake[1] = (int) (Math.random() * getBoardSize());
+              }
+
+              if(token.equals("S")){
+                moveToMake[2] = 1;
+              }
+              else{
+                moveToMake[2] = 0;
+              }
+            }
+          }
+        }
+      }
+    }
+    return moveToMake;
   }
 
   private boolean isMoveValid(int row, int col){
@@ -239,6 +428,7 @@ public class SOSGame{
     };
   }
 
+//ISSUE: SOS not in a straight line can sometimes form, must be an error while checking for SOS, need to investigate
   private boolean isSOSFormed(int row, int col, String moveContent){
     //Check if an SOS was formed by the current move
     int minRowIndex;

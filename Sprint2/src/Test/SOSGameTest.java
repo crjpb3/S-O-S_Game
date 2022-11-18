@@ -246,22 +246,43 @@ class SOSGameTest {
     assertEquals(token, Game.getCellContent(x,y));
   }
   @Test
-  void test1ComputerPlayerSimple(){
+  void testComputerPlayer2Simple(){
+    //Human Player 1, Computer Player 2
     SOSGame Game = new SOSGame(3,0,SOSGame.PlayerType.HUMAN,SOSGame.PlayerType.COMPUTER);
+
+    Game.makeMove(0,0,"S");
+    int[] computerMove = Game.computerMove();
+
+    assertFalse(Game.isCellEmpty(computerMove[0],computerMove[1]));
   }
 
   @Test
-  void test1ComputerPlayerGeneral(){
+  void testComputerPlayer2General(){
     SOSGame Game = new SOSGame(3,1,SOSGame.PlayerType.HUMAN,SOSGame.PlayerType.COMPUTER);
+
+    Game.makeMove(0,0,"S");
+    int[] computerMove = Game.computerMove();
+
+    assertFalse(Game.isCellEmpty(computerMove[0],computerMove[1]));
   }
 
   @Test
-  void test2ComputerPlayersSimple(){
-    SOSGame Game = new SOSGame(3,0,SOSGame.PlayerType.COMPUTER,SOSGame.PlayerType.COMPUTER);
+  void testComputerPlayer1Simple(){
+    SOSGame Game = new SOSGame(3,0,SOSGame.PlayerType.COMPUTER,SOSGame.PlayerType.HUMAN);
+
+    int[] computerMove = Game.computerMove();
+    Game.makeMove(0,0,"S");
+
+    assertFalse(Game.isCellEmpty(computerMove[0],computerMove[1]));
   }
 
   @Test
-  void test2ComputerPlayersGeneral(){
-    SOSGame Game = new SOSGame(3,1,SOSGame.PlayerType.COMPUTER,SOSGame.PlayerType.COMPUTER);
+  void testComputerPlayer1General(){
+    SOSGame Game = new SOSGame(3,1,SOSGame.PlayerType.COMPUTER,SOSGame.PlayerType.HUMAN);
+
+    int[] computerMove = Game.computerMove();
+    Game.makeMove(0,0,"S");
+
+    assertFalse(Game.isCellEmpty(computerMove[0],computerMove[1]));
   }
 }
