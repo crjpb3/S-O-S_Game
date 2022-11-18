@@ -3,7 +3,7 @@ package Product;
 import Product.SOSGame.PlayerType;
 
 public class Player {
-  public SOSGame.PlayerType PlayerType = SOSGame.PlayerType.HUMAN;
+  private SOSGame.PlayerType PlayerType = SOSGame.PlayerType.HUMAN;
   private int[] previousMove = {-1,-1};
   private int playerScore = 0;
 
