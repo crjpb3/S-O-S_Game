@@ -228,7 +228,6 @@ public class SOSGame{
         moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
       }
     }
-    System.out.println("moveInfo: " + moveInformation[0] + "," + moveInformation[1] + "," + compToken);
     return moveInformation;
   }
   
@@ -271,12 +270,6 @@ public class SOSGame{
             //Calculate extended cell to check
             int extendedRowIndex = i + (i - prevMove[0]);
             int extendedColIndex = j + (j - prevMove[1]);
-
-            System.out.println(
-                "prevMove(row,col,token): " + prevMove[0] + "," + prevMove[1] + "," + prevToken);
-            System.out.println("Loop vars(i,j): " + i + "," + j);
-            System.out.println(
-                "Ext cell indices(row,col): " + extendedRowIndex + "," + extendedColIndex);
 
             switch (gameBoard.get(i).get(j).getContent()) {
               case "":
@@ -361,11 +354,6 @@ public class SOSGame{
               continue;
             }
 
-            System.out.println(
-                "prevMove(row,col,token): " + prevMove[0] + "," + prevMove[1] + "," + prevToken);
-            System.out.println("Loop vars(i,j): " + i + "," + j);
-            System.out.println("Opp cell indices(row,col): " + oppRowIndex + "," + oppColIndex);
-
             if (Objects.equals("S", gameBoard.get(i).get(j).getContent()) && Objects.equals("",
                 gameBoard.get(oppRowIndex).get(oppColIndex).getContent())) {
               moveToMake[0] = oppRowIndex;
@@ -400,7 +388,6 @@ public class SOSGame{
         }
       }
     }
-    System.out.println("moveToMake: " + moveToMake[0] + "," + moveToMake[1] + "," + moveToMake[2]);
     return moveToMake;
   }
 
