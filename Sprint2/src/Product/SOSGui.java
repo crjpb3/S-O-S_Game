@@ -479,7 +479,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     }
   }
 
-  //Unused MouseListener methods; required overrides for MouseListener implementation
+  //Unused MouseListener methods; required overrides for MouseListener Interface
   @Override
   public void mousePressed(MouseEvent e) {}
 
