@@ -401,17 +401,14 @@ public class SOSGame{
     if(getUnoccupiedCellsCount() == 0){
       if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
         setGameStatus(Status.P1_WIN);
-        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
       else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
         setGameStatus(Status.P2_WIN);
-        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
       else{
         setGameStatus(Status.DRAW);
-        System.out.println("Scores: " + Player1.getScore() + ":" + Player2.getScore());
         return true;
       }
     }
