@@ -170,10 +170,36 @@ public class SOSGame{
     switch (getPlayerTurn()) {
       case PL1 -> {
         opponentPrevMoveCoords = Player2.getPreviousMove();
+
+        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+          //Make a random move
+          moveInformation[0] = (int) (Math.random() * getBoardSize());
+          moveInformation[1] = (int) (Math.random() * getBoardSize());
+          while (!gameBoard.get(moveInformation[0]).get(moveInformation[1]).isEmpty()) {
+            moveInformation[0] = (int) (Math.random() * getBoardSize());
+            moveInformation[1] = (int) (Math.random() * getBoardSize());
+          }
+          moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
+          return moveInformation;
+        }
+
         opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
       }
       case PL2 -> {
         opponentPrevMoveCoords = Player1.getPreviousMove();
+
+        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+          //Make a random move
+          moveInformation[0] = (int) (Math.random() * getBoardSize());
+          moveInformation[1] = (int) (Math.random() * getBoardSize());
+          while (!gameBoard.get(moveInformation[0]).get(moveInformation[1]).isEmpty()) {
+            moveInformation[0] = (int) (Math.random() * getBoardSize());
+            moveInformation[1] = (int) (Math.random() * getBoardSize());
+          }
+          moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
+          return moveInformation;
+        }
+        
         opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
       }
     }
