@@ -199,7 +199,7 @@ public class SOSGame{
           moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
           return moveInformation;
         }
-        
+
         opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
       }
     }
@@ -357,6 +357,10 @@ public class SOSGame{
               case 1 -> oppColIndex = j - 2;
             }
 
+            if((oppRowIndex < 0) || (oppRowIndex >= getBoardSize()) || (oppColIndex < 0) || (oppColIndex >= getBoardSize())){
+              continue;
+            }
+
             System.out.println(
                 "prevMove(row,col,token): " + prevMove[0] + "," + prevMove[1] + "," + prevToken);
             System.out.println("Loop vars(i,j): " + i + "," + j);
@@ -437,6 +441,7 @@ public class SOSGame{
     };
   }
 
+//ISSUE: SOS not in a straight line can sometimes form, must be an error while checking for SOS, need to investigate
   private boolean isSOSFormed(int row, int col, String moveContent){
     //Check if an SOS was formed by the current move
     int minRowIndex;
