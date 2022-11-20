@@ -1,35 +1,44 @@
 package Product;
 
 import static java.lang.Math.floor;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SOSGame{
+public class SOSGame {
+
   public enum Status {PLAYING, DRAW, P1_WIN, P2_WIN}
+
   Status gameStatus;
+
   public enum Mode {SIMPLE, GENERAL}
+
   Mode gameMode;
+
   public enum PlayerType {HUMAN, COMPUTER}
+
   public enum Turn {PL1, PL2}
+
   Turn currentTurn = Turn.PL1;
   Player Player1;
   Player Player2;
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   private int unoccupiedCellsCount;
   private int boardSize;
-  public <T> SOSGame(T size, int mode, PlayerType p1Type, PlayerType p2Type){
+
+  public <T> SOSGame(T size, int mode, PlayerType p1Type, PlayerType p2Type) {
     resetGame(size, mode, p1Type, p2Type);
   }
 
-  public <T> void resetGame(T size, int mode, PlayerType p1Type, PlayerType p2Type){
+  public <T> void resetGame(T size, int mode, PlayerType p1Type, PlayerType p2Type) {
     Player1 = new Player(p1Type);
     Player2 = new Player(p2Type);
     Player1.resetScore();
     Player2.resetScore();
 
     //Destroy existing gameBoard
-    for(int i = 0; i < gameBoard.size(); i++){
-      for(int j = 0; j < gameBoard.get(i).size(); j++){
+    for (int i = 0; i < gameBoard.size(); i++) {
+      for (int j = 0; j < gameBoard.get(i).size(); j++) {
         gameBoard.get(i).clear();
       }
       gameBoard.clear();
@@ -43,7 +52,7 @@ public class SOSGame{
     setGameStatus(Status.PLAYING);
   }
 
-  private <T> void setBoardSize(T size){
+  private <T> void setBoardSize(T size) {
     switch (size.getClass().getSimpleName()) {
       case "Integer" -> {
         int intSize = (int) size;
@@ -67,21 +76,21 @@ public class SOSGame{
     }
   }
 
-  public int getBoardSize(){
+  public int getBoardSize() {
     return boardSize;
   }
 
-  private void initBoard(){
-    for(int i = 0; i < getBoardSize(); i++){
+  private void initBoard() {
+    for (int i = 0; i < getBoardSize(); i++) {
       gameBoard.add(new ArrayList<>());
-      for(int j = 0; j < getBoardSize(); j++){
+      for (int j = 0; j < getBoardSize(); j++) {
         gameBoard.get(i).add(new SOSCell());
       }
     }
   }
 
-  private void setGameStatus(Status newStatus){
-    switch(newStatus){
+  private void setGameStatus(Status newStatus) {
+    switch (newStatus) {
       case P1_WIN -> gameStatus = Status.P1_WIN;
       case P2_WIN -> gameStatus = Status.P2_WIN;
       case DRAW -> gameStatus = Status.DRAW;
@@ -89,59 +98,58 @@ public class SOSGame{
     }
   }
 
-  public Status getGameStatus(){ return gameStatus; }
+  public Status getGameStatus() {
+    return gameStatus;
+  }
 
-  private void setGameMode(int mode){
-    if(mode == 1){
+  private void setGameMode(int mode) {
+    if (mode == 1) {
       gameMode = Mode.GENERAL;
-    }
-    else{
+    } else {
       gameMode = Mode.SIMPLE;
     }
   }
 
-  public String getGameMode(){
-    if(gameMode == Mode.SIMPLE){
+  public String getGameMode() {
+    if (gameMode == Mode.SIMPLE) {
       return "Simple";
     }
     return "General";
   }
 
-  public PlayerType getPlayerType(Turn playerTurn){
+  public PlayerType getPlayerType(Turn playerTurn) {
     return switch (playerTurn) {
       case PL1 -> Player1.getPlayerType();
       case PL2 -> Player2.getPlayerType();
     };
   }
 
-  public boolean isCellEmpty(int row, int col){
+  public boolean isCellEmpty(int row, int col) {
     return gameBoard.get(row).get(col).isEmpty();
   }
 
-  public String getCellContent(int row, int col){
+  public String getCellContent(int row, int col) {
     return gameBoard.get(row).get(col).getContent();
   }
 
-  public int makeMove(int row, int col, String moveContent){
-    if(isMoveValid(row, col)){
-      int[] playerMove = {row,col};
+  public int makeMove(int row, int col, String moveContent) {
+    if (isMoveValid(row, col)) {
+      int[] playerMove = {row, col};
       gameBoard.get(row).get(col).setContent(moveContent);
       updateUnoccupiedCellsCount();
 
-      if(getPlayerTurn() == Turn.PL1){
+      if (getPlayerTurn() == Turn.PL1) {
         Player1.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(0);
-      }
-      else{
+      } else {
         Player2.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(1);
       }
 
-      if(isGameOver(row,col,moveContent,gameMode)){
+      if (isGameOver(row, col, moveContent, gameMode)) {
         //return 1 lets the GUI know the game is over, so it can display game over notification
         return 1;
-      }
-      else{
+      } else {
         //Game is not over; change turn and continue
         changePlayerTurn();
         return 0;
@@ -150,28 +158,29 @@ public class SOSGame{
     return -1;
   }
 
-  private String computerChooseToken(){
-    int randInt = (int)(Math.random() * 2);
+  private String computerChooseToken() {
+    int randInt = (int) (Math.random() * 2);
 
-    if(randInt == 0){
+    if (randInt == 0) {
       return "S";
     }
 
-    return"O";
+    return "O";
   }
 
-  public int[] computerMove(){
-    int[] moveInformation = {-1,-1,-1};//{x-coordinate, y-coordinate, makeMove return int}
-    int decisionInt = ((int)(Math.random() * 99) % 3);
+  public int[] computerMove() {
+    int[] moveInformation = {-1, -1, -1};//{x-coordinate, y-coordinate, makeMove return int}
+    int decisionInt = ((int) (Math.random() * 99) % 3);
     String compToken = computerChooseToken();
-    int[] opponentPrevMoveCoords = {(int)(Math.random() * getBoardSize()),(int)(Math.random() * getBoardSize())};
+    int[] opponentPrevMoveCoords = {(int) (Math.random() * getBoardSize()),
+        (int) (Math.random() * getBoardSize())};
     String opponentPrevToken = "";
 
     switch (getPlayerTurn()) {
       case PL1 -> {
         opponentPrevMoveCoords = Player2.getPreviousMove();
 
-        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+        if ((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)) {
           //Make a random move
           moveInformation[0] = (int) (Math.random() * getBoardSize());
           moveInformation[1] = (int) (Math.random() * getBoardSize());
@@ -183,12 +192,13 @@ public class SOSGame{
           return moveInformation;
         }
 
-        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
+        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1])
+            .getContent();
       }
       case PL2 -> {
         opponentPrevMoveCoords = Player1.getPreviousMove();
 
-        if((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)){
+        if ((opponentPrevMoveCoords[0] == -1) || (opponentPrevMoveCoords[1] == -1)) {
           //Make a random move
           moveInformation[0] = (int) (Math.random() * getBoardSize());
           moveInformation[1] = (int) (Math.random() * getBoardSize());
@@ -200,7 +210,8 @@ public class SOSGame{
           return moveInformation;
         }
 
-        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1]).getContent();
+        opponentPrevToken = gameBoard.get(opponentPrevMoveCoords[0]).get(opponentPrevMoveCoords[1])
+            .getContent();
       }
     }
 
@@ -211,8 +222,7 @@ public class SOSGame{
         //Check token information returned from compCompleteSOSMove
         if (moveInformation[2] == 0) {
           compToken = "O";
-        }
-        else {
+        } else {
           compToken = "S";
         }
         moveInformation[2] = makeMove(moveInformation[0], moveInformation[1], compToken);
@@ -230,10 +240,11 @@ public class SOSGame{
     }
     return moveInformation;
   }
-  
-  private int[] compCompleteSOSMove(int[] moveToCheck, String placedToken){
+
+  private int[] compCompleteSOSMove(int[] moveToCheck, String placedToken) {
     int[] prevMove = moveToCheck;
-    int[] moveToMake = {-1,-1,0};//mmoveToMake[2] indicates which token to place, zero for "O" and 1 for "S"
+    int[] moveToMake = {-1, -1,
+        0};//mmoveToMake[2] indicates which token to place, zero for "O" and 1 for "S"
     String prevToken = placedToken;
     int minRowIndex;
     int maxRowIndex;
@@ -298,10 +309,9 @@ public class SOSGame{
                   moveToMake[1] = (int) (Math.random() * getBoardSize());
                 }
 
-                if(token.equals("S")){
+                if (token.equals("S")) {
                   moveToMake[2] = 1;
-                }
-                else{
+                } else {
                   moveToMake[2] = 0;
                 }
                 break;
@@ -331,7 +341,7 @@ public class SOSGame{
         if (maxColIndex >= getBoardSize()) {
           maxColIndex = (getBoardSize() - 1);
         }
-        
+
         for (int i = minRowIndex; i <= maxRowIndex; i++) {
           for (int j = minColIndex; j <= maxColIndex; j++) {
             if ((i == prevMove[0]) && (j == prevMove[1])) {
@@ -350,7 +360,8 @@ public class SOSGame{
               case 1 -> oppColIndex = j - 2;
             }
 
-            if((oppRowIndex < 0) || (oppRowIndex >= getBoardSize()) || (oppColIndex < 0) || (oppColIndex >= getBoardSize())){
+            if ((oppRowIndex < 0) || (oppRowIndex >= getBoardSize()) || (oppColIndex < 0) || (
+                oppColIndex >= getBoardSize())) {
               continue;
             }
 
@@ -359,14 +370,12 @@ public class SOSGame{
               moveToMake[0] = oppRowIndex;
               moveToMake[1] = oppColIndex;
               moveToMake[2] = 1;
-            }
-            else if (Objects.equals("S", gameBoard.get(oppRowIndex).get(oppColIndex).getContent())
+            } else if (Objects.equals("S", gameBoard.get(oppRowIndex).get(oppColIndex).getContent())
                 && Objects.equals("", gameBoard.get(i).get(j).getContent())) {
               moveToMake[0] = i;
               moveToMake[1] = j;
               moveToMake[2] = 1;
-            }
-            else{
+            } else {
               //Make a random move
               moveToMake[0] = (int) (Math.random() * getBoardSize());
               moveToMake[1] = (int) (Math.random() * getBoardSize());
@@ -377,10 +386,9 @@ public class SOSGame{
                 moveToMake[1] = (int) (Math.random() * getBoardSize());
               }
 
-              if(token.equals("S")){
+              if (token.equals("S")) {
                 moveToMake[2] = 1;
-              }
-              else{
+              } else {
                 moveToMake[2] = 0;
               }
             }
@@ -391,45 +399,45 @@ public class SOSGame{
     return moveToMake;
   }
 
-  private boolean isMoveValid(int row, int col){
-    if((row >= 0 && col >= 0) && (row < getBoardSize() && col < getBoardSize())){
+  private boolean isMoveValid(int row, int col) {
+    if ((row >= 0 && col >= 0) && (row < getBoardSize() && col < getBoardSize())) {
       return isCellEmpty(row, col);
     }
     return false;
   }
 
-  private void setPlayerTurn(Turn playerTurn){
+  private void setPlayerTurn(Turn playerTurn) {
     currentTurn = playerTurn;
   }
 
-  private void changePlayerTurn(){
-    if(getPlayerTurn() == Turn.PL1){
+  private void changePlayerTurn() {
+    if (getPlayerTurn() == Turn.PL1) {
       currentTurn = Turn.PL2;
       return;
     }
     currentTurn = Turn.PL1;
   }
 
-  public Turn getPlayerTurn(){
+  public Turn getPlayerTurn() {
     return currentTurn;
   }
 
-  private void updateGeneralGameScore(Turn playerTurn){
-    switch(playerTurn){
+  private void updateGeneralGameScore(Turn playerTurn) {
+    switch (playerTurn) {
       case PL1 -> Player1.updateScore();
       case PL2 -> Player2.updateScore();
     }
   }
 
-  public int getGeneralGameScore(Turn playerTurn){
+  public int getGeneralGameScore(Turn playerTurn) {
     return switch (playerTurn) {
       case PL1 -> Player1.getScore();
       case PL2 -> Player2.getScore();
     };
   }
 
-//ISSUE: SOS not in a straight line can sometimes form, must be an error while checking for SOS, need to investigate
-  private boolean isSOSFormed(int row, int col, String moveContent){
+  //ISSUE: SOS not in a straight line can sometimes form, must be an error while checking for SOS, need to investigate
+  private boolean isSOSFormed(int row, int col, String moveContent) {
     //Check if an SOS was formed by the current move
     int minRowIndex;
     int maxRowIndex;
@@ -489,7 +497,6 @@ public class SOSGame{
         maxRowIndex = row + 1;
         maxColIndex = col + 1;
 
-
         //If an "O" is placed in a corner, it is impossible to have formed an SOS
         if (((row == 0) && (col == 0)) || (row == 0) && (col == getBoardSize() - 1) || (
             (row == getBoardSize() - 1) && (col == 0)) || ((row == getBoardSize() - 1) && (col
@@ -510,7 +517,8 @@ public class SOSGame{
         }
 
         for (int i = minRowIndex; i <= row; i++) {
-          for (int j = minColIndex; j <= maxColIndex; j++) {//Check surrounding cells for "S" content
+          for (int j = minColIndex; j <= maxColIndex;
+              j++) {//Check surrounding cells for "S" content
             if (Objects.equals(gameBoard.get(i).get(j).getContent(), "S")) {
               int oppCellRow = 0;
               int oppCellCol = 0;
@@ -570,34 +578,31 @@ public class SOSGame{
     return isFormed;
   }
 
-  private boolean isGameOver(int row, int col, String moveContent, Mode gameMode){
-    boolean isSOS = isSOSFormed(row,col,moveContent);
+  private boolean isGameOver(int row, int col, String moveContent, Mode gameMode) {
+    boolean isSOS = isSOSFormed(row, col, moveContent);
 
-    if(isSOS && (gameMode == Mode.SIMPLE)){
+    if (isSOS && (gameMode == Mode.SIMPLE)) {
       switch (getPlayerTurn()) {
         case PL1 -> setGameStatus(Status.P1_WIN);
         case PL2 -> setGameStatus(Status.P2_WIN);
       }
       return true;
-    }
-    else if(!isSOS && (Objects.equals(getGameMode(), "Simple"))){
-      if(getUnoccupiedCellsCount() == 0){
+    } else if (!isSOS && (Objects.equals(getGameMode(), "Simple"))) {
+      if (getUnoccupiedCellsCount() == 0) {
         setGameStatus(Status.DRAW);
         return true;
       }
     }
 
     //Checks for General game over and appropriate status update
-    if(getUnoccupiedCellsCount() == 0){
-      if(getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)){
+    if (getUnoccupiedCellsCount() == 0) {
+      if (getGeneralGameScore(Turn.PL1) > getGeneralGameScore(Turn.PL2)) {
         setGameStatus(Status.P1_WIN);
         return true;
-      }
-      else if(getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)){
+      } else if (getGeneralGameScore(Turn.PL2) > getGeneralGameScore(Turn.PL1)) {
         setGameStatus(Status.P2_WIN);
         return true;
-      }
-      else{
+      } else {
         setGameStatus(Status.DRAW);
         return true;
       }
@@ -605,35 +610,35 @@ public class SOSGame{
     return false;
   }
 
-  private void setUnoccupiedCellsCount(int boardSize){
-    unoccupiedCellsCount = boardSize*boardSize;
+  private void setUnoccupiedCellsCount(int boardSize) {
+    unoccupiedCellsCount = boardSize * boardSize;
   }
 
-  private int getUnoccupiedCellsCount(){
+  private int getUnoccupiedCellsCount() {
     return unoccupiedCellsCount;
   }
 
-  private void updateUnoccupiedCellsCount(){
+  private void updateUnoccupiedCellsCount() {
     unoccupiedCellsCount--;
   }
 
-  public int getCellOwnerID(int row, int col){
+  public int getCellOwnerID(int row, int col) {
     return gameBoard.get(row).get(col).getCellOwner();
   }
 
-  public int getBeginRowIndex(int row, int col){
+  public int getBeginRowIndex(int row, int col) {
     return gameBoard.get(row).get(col).getBeginRowIndex();
   }
 
-  public int getEndRowIndex(int row, int col){
+  public int getEndRowIndex(int row, int col) {
     return gameBoard.get(row).get(col).getEndRowIndex();
   }
 
-  public int getBeginColIndex(int row, int col){
+  public int getBeginColIndex(int row, int col) {
     return gameBoard.get(row).get(col).getBeginColIndex();
   }
 
-  public int getEndColIndex(int row, int col){
+  public int getEndColIndex(int row, int col) {
     return gameBoard.get(row).get(col).getEndColIndex();
   }
 }

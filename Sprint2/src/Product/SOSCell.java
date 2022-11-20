@@ -2,7 +2,8 @@ package Product;
 
 import java.util.Objects;
 
-public class SOSCell{
+public class SOSCell {
+
   private String currentContent;
   private int cellOwnerID = -1;
   private int beginRowIndex = -1;
@@ -10,53 +11,53 @@ public class SOSCell{
   private int beginColIndex = -1;
   private int endColIndex = -1;
 
-  public SOSCell(){
+  public SOSCell() {
     this.setContent("");
   }
 
-  public boolean isEmpty(){
+  public boolean isEmpty() {
     return Objects.equals(this.currentContent, "");
   }
 
-  public void setContent(String content){
+  public void setContent(String content) {
     this.currentContent = content;
   }
-  
-  public String getContent(){
+
+  public String getContent() {
     return this.currentContent;
   }
 
-  public void setCellOwner(int playerID){
+  public void setCellOwner(int playerID) {
     this.cellOwnerID = playerID;
   }
 
-  public int getCellOwner(){
+  public int getCellOwner() {
     return this.cellOwnerID;
   }
 
-  public void setBeginIndexOfSOS(int row, int col){
+  public void setBeginIndexOfSOS(int row, int col) {
     this.beginRowIndex = row;
     this.beginColIndex = col;
   }
 
-  public void setEndIndexOfSOS(int row, int col){
+  public void setEndIndexOfSOS(int row, int col) {
     this.endRowIndex = row;
     this.endColIndex = col;
   }
 
-  public int getBeginRowIndex(){
+  public int getBeginRowIndex() {
     return this.beginRowIndex;
   }
 
-  public int getEndRowIndex(){
+  public int getEndRowIndex() {
     return this.endRowIndex;
   }
 
-  public int getBeginColIndex(){
+  public int getBeginColIndex() {
     return this.beginColIndex;
   }
 
-  public int getEndColIndex(){
+  public int getEndColIndex() {
     return this.endColIndex;
   }
 }
