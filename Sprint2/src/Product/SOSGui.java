@@ -142,29 +142,31 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       return;
     }
 
-    for (int i = 0; i < boardCellsList.size(); i++) {
-      for (int j = 0; j < boardCellsList.get(i).size(); j++) {
-        if (e.getSource() == boardCellsList.get(i).get(j)) {
-          int moveIntReturn;
-          if (currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
-            moveIntReturn = currentGame.makeMove(i, j, p1MoveChar);
-            if (moveIntReturn == 0) {
-              boardCellsList.get(i).get(j).setText(p1MoveChar);
-              drawSOSLine(i, j);
-            } else if (moveIntReturn == 1) {
-              boardCellsList.get(i).get(j).setText(p1MoveChar);
-              drawSOSLine(i, j);
-              handleGameOVer();
-            }
-          } else {
-            moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
-            if (moveIntReturn == 0) {
-              boardCellsList.get(i).get(j).setText(p2MoveChar);
-              drawSOSLine(i, j);
-            } else if (moveIntReturn == 1) {
-              boardCellsList.get(i).get(j).setText(p2MoveChar);
-              drawSOSLine(i, j);
-              handleGameOVer();
+    if(currentGame.getPlayerType(playerTurn) == PlayerType.HUMAN){
+      for (int i = 0; i < boardCellsList.size(); i++) {
+        for (int j = 0; j < boardCellsList.get(i).size(); j++) {
+          if (e.getSource() == boardCellsList.get(i).get(j)) {
+            int moveIntReturn;
+            if (currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
+              moveIntReturn = currentGame.makeMove(i, j, p1MoveChar);
+              if (moveIntReturn == 0) {
+                boardCellsList.get(i).get(j).setText(p1MoveChar);
+                drawSOSLine(i, j);
+              } else if (moveIntReturn == 1) {
+                boardCellsList.get(i).get(j).setText(p1MoveChar);
+                drawSOSLine(i, j);
+                handleGameOVer();
+              }
+            } else {
+              moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
+              if (moveIntReturn == 0) {
+                boardCellsList.get(i).get(j).setText(p2MoveChar);
+                drawSOSLine(i, j);
+              } else if (moveIntReturn == 1) {
+                boardCellsList.get(i).get(j).setText(p2MoveChar);
+                drawSOSLine(i, j);
+                handleGameOVer();
+              }
             }
           }
         }
