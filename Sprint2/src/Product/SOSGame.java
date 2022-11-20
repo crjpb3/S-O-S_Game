@@ -243,8 +243,8 @@ public class SOSGame {
 
   private int[] compCompleteSOSMove(int[] moveToCheck, String placedToken) {
     int[] prevMove = moveToCheck;
-    int[] moveToMake = {-1, -1,
-        0};//mmoveToMake[2] indicates which token to place, zero for "O" and 1 for "S"
+    //moveToMake[2] indicates which token to place, zero for "O" and 1 for "S"
+    int[] moveToMake = {-1, -1, 0};
     String prevToken = placedToken;
     int minRowIndex;
     int maxRowIndex;
@@ -272,6 +272,7 @@ public class SOSGame {
         if ((prevMove[1] + 2) > getBoardSize() - 1) {
           maxColIndex = prevMove[1];
         }
+
         for (int i = minRowIndex; i <= maxRowIndex; i++) {
           for (int j = minColIndex; j <= maxColIndex; j++) {
             if ((i == prevMove[0]) && (j == prevMove[1])) {
@@ -299,22 +300,23 @@ public class SOSGame {
                   moveToMake[2] = 1;
                 }
                 break;
-              default:
-                //Make a random move
+            }
+
+            if(moveToMake[0] == -1){
+              //Make a random move
+              moveToMake[0] = (int) (Math.random() * getBoardSize());
+              moveToMake[1] = (int) (Math.random() * getBoardSize());
+              String token = computerChooseToken();
+              while (!gameBoard.get(moveToMake[0]).get(moveToMake[1]).isEmpty()) {
                 moveToMake[0] = (int) (Math.random() * getBoardSize());
                 moveToMake[1] = (int) (Math.random() * getBoardSize());
-                String token = computerChooseToken();
-                while (!gameBoard.get(moveToMake[0]).get(moveToMake[1]).isEmpty()) {
-                  moveToMake[0] = (int) (Math.random() * getBoardSize());
-                  moveToMake[1] = (int) (Math.random() * getBoardSize());
-                }
+              }
 
-                if (token.equals("S")) {
-                  moveToMake[2] = 1;
-                } else {
-                  moveToMake[2] = 0;
-                }
-                break;
+              if (token.equals("S")) {
+                moveToMake[2] = 1;
+              } else {
+                moveToMake[2] = 0;
+              }
             }
           }
         }
@@ -395,6 +397,21 @@ public class SOSGame {
           }
         }
       }
+    }
+
+    //Make a random move
+    moveToMake[0] = (int) (Math.random() * getBoardSize());
+    moveToMake[1] = (int) (Math.random() * getBoardSize());
+    String token = computerChooseToken();
+    while (!gameBoard.get(moveToMake[0]).get(moveToMake[1]).isEmpty()) {
+      moveToMake[0] = (int) (Math.random() * getBoardSize());
+      moveToMake[1] = (int) (Math.random() * getBoardSize());
+    }
+
+    if (token.equals("S")) {
+      moveToMake[2] = 1;
+    } else {
+      moveToMake[2] = 0;
     }
     return moveToMake;
   }
