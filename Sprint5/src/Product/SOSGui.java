@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
@@ -86,7 +87,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     boardCellsList = new ArrayList<>();
     initGUI();
     resetBoard(3);
-    createPreviewBoard();//One time function to display board/game representation; "main screen"
+    createPreviewBoard();
   }
 
   @Override
@@ -115,34 +116,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       p2MoveChar = "O";
     } else if (e.getSource() == resetButton) {
       startGame();
-      resetBoard(currentGame.getBoardSize());
     }
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
     //Making a move
-    if ((e.getSource() == currentTurnLabel) && (currentGame.getPlayerType(playerTurn)
-        == PlayerType.COMPUTER)) {
-      int[] moveInformation = currentGame.computerMove();
-      int moveX = moveInformation[0];
-      int moveY = moveInformation[1];
-      String moveToken = currentGame.getCellContent(moveX, moveY);
-      int moveInt = moveInformation[2];
-
-      if (moveInt == 0) {
-        boardCellsList.get(moveX).get(moveY).setText(moveToken);
-        drawSOSLine(moveX, moveY);
-      } else if (moveInt == 1) {
-        boardCellsList.get(moveX).get(moveY).setText(moveToken);
-        drawSOSLine(moveX, moveY);
-        handleGameOVer();
-      }
-      changePlayerTurn();
-      return;
-    }
-
-    if(currentGame.getPlayerType(playerTurn) == PlayerType.HUMAN){
+    if (currentGame.getPlayerType(playerTurn) == PlayerType.HUMAN) {
       for (int i = 0; i < boardCellsList.size(); i++) {
         for (int j = 0; j < boardCellsList.get(i).size(); j++) {
           if (e.getSource() == boardCellsList.get(i).get(j)) {
@@ -152,7 +132,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
               if (moveIntReturn == 0) {//makeMove returns 0 meaning the game is not over
                 boardCellsList.get(i).get(j).setText(p1MoveChar);
                 drawSOSLine(i, j);
-              } else if (moveIntReturn == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
+              } else if (moveIntReturn
+                  == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
                 boardCellsList.get(i).get(j).setText(p1MoveChar);
                 drawSOSLine(i, j);
                 handleGameOVer();
@@ -162,7 +143,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
               if (moveIntReturn == 0) {//makeMove returns 0 meaning the game is not over
                 boardCellsList.get(i).get(j).setText(p2MoveChar);
                 drawSOSLine(i, j);
-              } else if (moveIntReturn == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
+              } else if (moveIntReturn
+                  == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
                 boardCellsList.get(i).get(j).setText(p2MoveChar);
                 drawSOSLine(i, j);
                 handleGameOVer();
@@ -171,8 +153,38 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
           }
         }
       }
+      changePlayerTurn();
+
+      if(currentGame.getPlayerType(playerTurn) == PlayerType.COMPUTER){//Handle computer player turn
+        Timer computerTurnTimer = new Timer(700, null);
+        computerTurnTimer.setRepeats(false);
+        computerTurnTimer.setInitialDelay(700);
+
+        computerTurnTimer.addActionListener(new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            int[] moveInformation = currentGame.computerMove();
+            int moveX = moveInformation[0];
+            int moveY = moveInformation[1];
+            String moveToken = currentGame.getCellContent(moveX, moveY);
+            int moveInt = moveInformation[2];
+
+            if (moveInt == 0) {
+              boardCellsList.get(moveX).get(moveY).setText(moveToken);
+              drawSOSLine(moveX, moveY);
+            } else if (moveInt == 1) {
+              computerTurnTimer.stop();
+              boardCellsList.get(moveX).get(moveY).setText(moveToken);
+              drawSOSLine(moveX, moveY);
+              handleGameOVer();
+            }
+            computerTurnTimer.stop();
+            changePlayerTurn();
+          }
+        });
+        computerTurnTimer.start();
+      }
     }
-    changePlayerTurn();
   }
 
   private void panelsComponentsSetup() {
@@ -375,11 +387,61 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     resetBoard(currentGame.getBoardSize());
 
-    if ((currentGame.getPlayerType(Turn.PL1) == PlayerType.COMPUTER) || (
+    if ((currentGame.getPlayerType(Turn.PL1) == PlayerType.COMPUTER) && (
         currentGame.getPlayerType(Turn.PL2) == PlayerType.COMPUTER)) {
-      JOptionPane.showMessageDialog(Board,
-          "Click the player turn label to have the computer player(s) make their move!",
-          "Computer Player Information", JOptionPane.INFORMATION_MESSAGE);
+      final int timerBaseDelay = 1000;
+      final int timerInitialDelay = 700;
+      final int timerAdjustedDelayOffset = (currentGame.getBoardSize() / 2) * 100;
+      int timerAdjustedDelay = timerBaseDelay;
+
+      if (currentGame.getBoardSize() > 3) {
+        timerAdjustedDelay -= timerAdjustedDelayOffset;
+      }
+
+      Timer computerTurnTimer = new Timer(timerAdjustedDelay, null);
+      computerTurnTimer.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          int[] moveInformation = currentGame.computerMove();
+          int moveX = moveInformation[0];
+          int moveY = moveInformation[1];
+          String moveToken = currentGame.getCellContent(moveX, moveY);
+          int moveInt = moveInformation[2];
+
+          if (moveInt == 0) {
+            boardCellsList.get(moveX).get(moveY).setText(moveToken);
+            drawSOSLine(moveX, moveY);
+          } else if (moveInt == 1) {
+            computerTurnTimer.stop();
+            boardCellsList.get(moveX).get(moveY).setText(moveToken);
+            drawSOSLine(moveX, moveY);
+            handleGameOVer();
+          }
+          changePlayerTurn();
+        }
+      });
+
+      computerTurnTimer.setRepeats(true);
+      computerTurnTimer.setInitialDelay(timerInitialDelay);
+      computerTurnTimer.start();
+    }
+    else if(currentGame.getPlayerType(Turn.PL1) == PlayerType.COMPUTER){
+      //Handles initiating the first turn of the game if Player 1 is a computer player and player 2 is not
+      int[] moveInformation = currentGame.computerMove();
+      int moveX = moveInformation[0];
+      int moveY = moveInformation[1];
+      String moveToken = currentGame.getCellContent(moveX, moveY);
+      int moveInt = moveInformation[2];
+
+      if (moveInt == 0) {
+        boardCellsList.get(moveX).get(moveY).setText(moveToken);
+        drawSOSLine(moveX, moveY);
+      } else if (moveInt == 1) {
+        boardCellsList.get(moveX).get(moveY).setText(moveToken);
+        drawSOSLine(moveX, moveY);
+        handleGameOVer();
+      }
+      changePlayerTurn();
     }
   }
 
