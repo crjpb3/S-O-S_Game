@@ -169,7 +169,7 @@ public class SOSGame {
   }
 
   public int[] computerMove() {
-    int[] moveInformation = {-1, -1, -1};//{x-coordinate, y-coordinate, makeMove return int}
+    int[] moveInformation = {-1, -1, -1};//{row, column, makeMove return int}
     int decisionInt = ((int) (Math.random() * 99) % 3);
     String compToken = computerChooseToken();
     int[] opponentPrevMoveCoords = {(int) (Math.random() * getBoardSize()),
