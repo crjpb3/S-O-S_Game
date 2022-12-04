@@ -149,20 +149,20 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
             int moveIntReturn;
             if (currentGame.getPlayerTurn() == SOSGame.Turn.PL1) {
               moveIntReturn = currentGame.makeMove(i, j, p1MoveChar);
-              if (moveIntReturn == 0) {
+              if (moveIntReturn == 0) {//makeMove returns 0 meaning the game is not over
                 boardCellsList.get(i).get(j).setText(p1MoveChar);
                 drawSOSLine(i, j);
-              } else if (moveIntReturn == 1) {
+              } else if (moveIntReturn == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
                 boardCellsList.get(i).get(j).setText(p1MoveChar);
                 drawSOSLine(i, j);
                 handleGameOVer();
               }
             } else {
               moveIntReturn = currentGame.makeMove(i, j, p2MoveChar);
-              if (moveIntReturn == 0) {
+              if (moveIntReturn == 0) {//makeMove returns 0 meaning the game is not over
                 boardCellsList.get(i).get(j).setText(p2MoveChar);
                 drawSOSLine(i, j);
-              } else if (moveIntReturn == 1) {
+              } else if (moveIntReturn == 1) {//makeMove returns 1 meaning the game is over and needs to be handled
                 boardCellsList.get(i).get(j).setText(p2MoveChar);
                 drawSOSLine(i, j);
                 handleGameOVer();
