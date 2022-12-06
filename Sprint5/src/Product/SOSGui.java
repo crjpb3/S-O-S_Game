@@ -23,6 +23,7 @@ import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -58,6 +59,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
   private JRadioButton simpleGameModeOption;
   private JRadioButton generalGameModeOption;
   private ButtonGroup gameModeGroup;
+  private JCheckBox recordOption;
 
   private JLabel player1SectionLabel;
   private JRadioButton player1MoveS;
@@ -177,6 +179,8 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     startButton.addActionListener(this);
     resetButton = new JButton("New Game");
     resetButton.addActionListener(this);
+    recordOption = new JCheckBox("Record Game");
+    recordOption.setFocusable(false);
     gameModeLabel = new JLabel("Game Mode:");
     simpleGameModeOption = new JRadioButton("Simple", true);
     simpleGameModeOption.addActionListener(this);
@@ -257,6 +261,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     Top.add(generalGameModeOption);
     Top.add(boardSizeLabel);
     Top.add(boardSizeInput);
+    Top.add(recordOption);
     Top.add(startButton);
 
     Left = new JPanel(new GridLayout(5, 1));
@@ -343,18 +348,18 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private void startGame() {
     try {
-      currentGame = new SOSGame(Integer.parseInt(boardSizeInput.getText()), gameModeSelection,
+      currentGame = new SOSGame(Integer.parseInt(boardSizeInput.getText()), gameModeSelection, recordOption.isSelected(),
           p1Type, p2Type);
     } catch (NumberFormatException e1) {
       try {
         currentGame = new SOSGame(Double.parseDouble(boardSizeInput.getText()), gameModeSelection,
-            p1Type, p2Type);
+            recordOption.isSelected(), p1Type, p2Type);
       } catch (NumberFormatException e2) {
         try {
           currentGame = new SOSGame(Float.parseFloat(boardSizeInput.getText()), gameModeSelection,
-              p1Type, p2Type);
+              recordOption.isSelected(), p1Type, p2Type);
         } catch (NumberFormatException e3) {
-          currentGame = new SOSGame(boardSizeInput.getText(), gameModeSelection, p1Type, p2Type);
+          currentGame = new SOSGame(boardSizeInput.getText(), gameModeSelection, recordOption.isSelected(), p1Type, p2Type);
         }
       }
     }
@@ -498,7 +503,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private void handleGameOVer() {
     //Check game status for game over and display appropriate notification
-    String[] gameOverOptionsList = {"Exit Game", "New Game"};
+    String[] gameOverOptionsList = {"Exit Game", "New Game", "Replay"};
     String drawMessage = "The game is a draw!";
     String p1WinMessage = "<html><font color=blue>Player 1</font> wins!</html>";
     String p2WinMessage = "<html><font color=red>Player 2</font> wins!</html>";
@@ -517,13 +522,13 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     if (currentGame.getGameStatus() == Status.DRAW) {
       gameOverOptionSelection = JOptionPane.showOptionDialog(this, drawMessage, "DRAW",
-          JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     } else if (currentGame.getGameStatus() == Status.P1_WIN) {
       gameOverOptionSelection = JOptionPane.showOptionDialog(this, p1WinMessage, "WINNER",
-          JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     } else if (currentGame.getGameStatus() == Status.P2_WIN) {
       gameOverOptionSelection = JOptionPane.showOptionDialog(this, p2WinMessage, "WINNER",
-          JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
     }
 
     //Check user's game over choice
@@ -536,6 +541,9 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       Bottom.remove(currentTurnLabel);
       Bottom.updateUI();
       createPreviewBoard();
+    } else if(gameOverOptionSelection == 2){//Replay game scenario
+      SOSGame ReplayBoard = new SOSGame(currentGame.getBoardSize(), gameModeSelection, false, PlayerType.REPLAY, PlayerType.REPLAY);
+      currentGame.RecAndReplay.replayRecordedGame();
     }
   }
 
