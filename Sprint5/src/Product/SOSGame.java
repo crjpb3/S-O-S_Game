@@ -35,7 +35,6 @@ public class SOSGame {
   public <T> void resetGame(T size, int mode, boolean recordOption, PlayerType p1Type, PlayerType p2Type) {
     if(recordOption){
       RecAndReplay = new GameReplay();
-      GameReplay.resetMoveLogFile();
     }
     isRecorded = recordOption;
     Player1 = new Player(p1Type);
@@ -85,10 +84,6 @@ public class SOSGame {
 
   public int getBoardSize() {
     return this.boardSize;
-  }
-
-  private void setIsRecorded(boolean isRecordedSelection){
-    this.isRecorded = isRecordedSelection;
   }
 
   public boolean getIsRecorded(){ return this.isRecorded; }

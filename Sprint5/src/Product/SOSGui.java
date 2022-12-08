@@ -117,6 +117,7 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     } else if (e.getSource() == player2MoveO) {
       p2MoveChar = "O";
     } else if (e.getSource() == resetButton) {
+      GameReplay.resetMoveLogFile();
       startGame();
     }
   }
@@ -403,6 +404,19 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       //Handles initiating the first turn of the game if Player 1 is a computer player and player 2 is not
       handleComputerTurn();
     }
+    else if(currentGame.getPlayerType(Turn.PL1) == PlayerType.REPLAY){
+      Timer replayTurnTimer = new Timer(500, null);
+      replayTurnTimer.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          handleReplayTurn(replayTurnTimer);
+        }
+      });
+
+      replayTurnTimer.setRepeats(true);
+      replayTurnTimer.setInitialDelay(700);
+      replayTurnTimer.start();
+    }
   }
 
   private void handleComputerTurn(){//For handling when player 1 is a computer and player 2 is not
@@ -429,6 +443,29 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
     int moveY = moveInformation[1];
     String moveToken = currentGame.getCellContent(moveX, moveY);
     int moveInt = moveInformation[2];
+
+    if (moveInt == 0) {
+      boardCellsList.get(moveX).get(moveY).setText(moveToken);
+      drawSOSLine(moveX, moveY);
+    } else if (moveInt == 1) {
+      turnTimer.stop();
+      boardCellsList.get(moveX).get(moveY).setText(moveToken);
+      drawSOSLine(moveX, moveY);
+      handleGameOVer();
+    }
+    changePlayerTurn();
+  }
+
+  private void handleReplayTurn(Timer turnTimer){
+    GameReplay ReplayObject = new GameReplay();
+    int[] moveInformation = ReplayObject.getRecordedMove();
+    int moveX = moveInformation[0];
+    int moveY = moveInformation[1];
+    String moveToken = "O";
+    if(moveInformation[2] == 1){
+      moveToken = "S";
+    }
+    int moveInt = currentGame.makeMove(moveX, moveY, moveToken);
 
     if (moveInt == 0) {
       boardCellsList.get(moveX).get(moveY).setText(moveToken);
@@ -503,7 +540,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
   private void handleGameOVer() {
     //Check game status for game over and display appropriate notification
-    String[] gameOverOptionsList = {"Exit Game", "New Game", "Replay"};
     String drawMessage = "The game is a draw!";
     String p1WinMessage = "<html><font color=blue>Player 1</font> wins!</html>";
     String p2WinMessage = "<html><font color=red>Player 2</font> wins!</html>";
@@ -520,30 +556,59 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
               + ":" + currentGame.Player1.getScore() + "</html>";
     }
 
-    if (currentGame.getGameStatus() == Status.DRAW) {
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, drawMessage, "DRAW",
-          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
-    } else if (currentGame.getGameStatus() == Status.P1_WIN) {
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, p1WinMessage, "WINNER",
-          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
-    } else if (currentGame.getGameStatus() == Status.P2_WIN) {
-      gameOverOptionSelection = JOptionPane.showOptionDialog(this, p2WinMessage, "WINNER",
-          JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+    if(currentGame.getIsRecorded()){
+      String[] gameOverOptionsList = {"Exit Game", "New Game", "Replay"};
+      if (currentGame.getGameStatus() == Status.DRAW) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, drawMessage, "DRAW",
+            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      } else if (currentGame.getGameStatus() == Status.P1_WIN) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, p1WinMessage, "WINNER",
+            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      } else if (currentGame.getGameStatus() == Status.P2_WIN) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, p2WinMessage, "WINNER",
+            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      }
+    }
+    else{
+      String[] gameOverOptionsList = {"Exit Game", "New Game"};
+      if (currentGame.getGameStatus() == Status.DRAW) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, drawMessage, "DRAW",
+            JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      } else if (currentGame.getGameStatus() == Status.P1_WIN) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, p1WinMessage, "WINNER",
+            JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      } else if (currentGame.getGameStatus() == Status.P2_WIN) {
+        gameOverOptionSelection = JOptionPane.showOptionDialog(this, p2WinMessage, "WINNER",
+            JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, gameOverOptionsList, 0);
+      }
     }
 
     //Check user's game over choice
-    if (gameOverOptionSelection == 0) {
+    if (gameOverOptionSelection <= 0) {
       System.exit(0);
     } else if (gameOverOptionSelection == 1) {
+      recordOption.setSelected(false);
+      p1Type = PlayerType.HUMAN;
+      player1HumanType.setSelected(true);
+      player1MoveS.setSelected(true);
+      p2Type = PlayerType.HUMAN;
+      player2HumanType.setSelected(true);
+      player2MoveS.setSelected(true);
+
       Top.remove(resetButton);
       Top.add(startButton);
       Top.updateUI();
       Bottom.remove(currentTurnLabel);
       Bottom.updateUI();
+
       createPreviewBoard();
+      GameReplay.resetMoveLogFile();
     } else if(gameOverOptionSelection == 2){//Replay game scenario
       SOSGame ReplayBoard = new SOSGame(currentGame.getBoardSize(), gameModeSelection, false, PlayerType.REPLAY, PlayerType.REPLAY);
-      currentGame.RecAndReplay.replayRecordedGame();
+      recordOption.setSelected(false);
+      p1Type = PlayerType.REPLAY;
+      p2Type = PlayerType.REPLAY;
+      startGame();
     }
   }
 
