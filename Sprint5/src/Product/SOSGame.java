@@ -15,7 +15,7 @@ public class SOSGame {
 
   Mode gameMode;
 
-  public enum PlayerType {HUMAN, COMPUTER}
+  public enum PlayerType {HUMAN, COMPUTER, REPLAY}
 
   public enum Turn {PL1, PL2}
 
@@ -25,12 +25,18 @@ public class SOSGame {
   private ArrayList<ArrayList<SOSCell>> gameBoard = new ArrayList<>();
   private int unoccupiedCellsCount;
   private int boardSize;
+  private boolean isRecorded = false;
+  GameReplay RecAndReplay;
 
-  public <T> SOSGame(T size, int mode, PlayerType p1Type, PlayerType p2Type) {
-    resetGame(size, mode, p1Type, p2Type);
+  public <T> SOSGame(T size, int mode, boolean recordOption, PlayerType p1Type, PlayerType p2Type) {
+    resetGame(size, mode, recordOption, p1Type, p2Type);
   }
 
-  public <T> void resetGame(T size, int mode, PlayerType p1Type, PlayerType p2Type) {
+  public <T> void resetGame(T size, int mode, boolean recordOption, PlayerType p1Type, PlayerType p2Type) {
+    if(recordOption){
+      RecAndReplay = new GameReplay();
+    }
+    isRecorded = recordOption;
     Player1 = new Player(p1Type);
     Player2 = new Player(p2Type);
     Player1.resetScore();
@@ -77,8 +83,10 @@ public class SOSGame {
   }
 
   public int getBoardSize() {
-    return boardSize;
+    return this.boardSize;
   }
+
+  public boolean getIsRecorded(){ return this.isRecorded; }
 
   private void initBoard() {
     for (int i = 0; i < getBoardSize(); i++) {
@@ -141,9 +149,15 @@ public class SOSGame {
       if (getPlayerTurn() == Turn.PL1) {
         Player1.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(0);
+        if(getIsRecorded()){
+          RecAndReplay.recordMove(Player1, gameBoard);
+        }
       } else {
         Player2.setPreviousMove(playerMove);
         gameBoard.get(row).get(col).setCellOwner(1);
+        if(getIsRecorded()){
+          RecAndReplay.recordMove(Player2, gameBoard);
+        }
       }
 
       if (isGameOver(row, col, moveContent, gameMode)) {

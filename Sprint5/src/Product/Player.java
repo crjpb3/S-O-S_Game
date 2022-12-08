@@ -1,7 +1,5 @@
 package Product;
 
-import Product.SOSGame.PlayerType;
-
 public class Player {
 
   private SOSGame.PlayerType PlayerType = SOSGame.PlayerType.HUMAN;
