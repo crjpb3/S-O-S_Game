@@ -585,9 +585,11 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
 
     //Check user's game over choice
     if (gameOverOptionSelection <= 0) {
+      GameReplay.resetMoveLogFile();
       System.exit(0);
     } else if (gameOverOptionSelection == 1) {
       recordOption.setSelected(false);
+      GameReplay.resetMoveLogFile();
       p1Type = PlayerType.HUMAN;
       player1HumanType.setSelected(true);
       player1MoveS.setSelected(true);
@@ -602,7 +604,6 @@ public class SOSGui extends JFrame implements ActionListener, MouseListener {
       Bottom.updateUI();
 
       createPreviewBoard();
-      GameReplay.resetMoveLogFile();
     } else if(gameOverOptionSelection == 2){//Replay game scenario
       SOSGame ReplayBoard = new SOSGame(currentGame.getBoardSize(), gameModeSelection, false, PlayerType.REPLAY, PlayerType.REPLAY);
       recordOption.setSelected(false);
